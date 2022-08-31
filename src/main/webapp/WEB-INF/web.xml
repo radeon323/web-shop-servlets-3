@@ -1,0 +1,43 @@
+<web-app>
+
+    <servlet>
+        <servlet-name>showAllProductsServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.ShowAllProductsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>showAllProductsServlet</servlet-name>
+        <url-pattern>/products</url-pattern>
+        <url-pattern>/products/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addProductServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.AddProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addProductServlet</servlet-name>
+        <url-pattern>/products/add</url-pattern>
+        <url-pattern>/products/add/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>deleteProductServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.DeleteProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteProductServlet</servlet-name>
+        <url-pattern>/products/delete</url-pattern>
+        <url-pattern>/products/delete/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>editProductServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.EditProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editProductServlet</servlet-name>
+        <url-pattern>/products/edit</url-pattern>
+        <url-pattern>/products/edit/</url-pattern>
+    </servlet-mapping>
+
+</web-app>
