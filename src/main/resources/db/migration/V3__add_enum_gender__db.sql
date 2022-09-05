@@ -1,0 +1,4 @@
+ALTER TABLE users
+DROP COLUMN gender;
+
+CREATE TYPE gender AS ENUM ('MALE', 'FEMALE');

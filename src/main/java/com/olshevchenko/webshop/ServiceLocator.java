@@ -1,7 +1,11 @@
 package com.olshevchenko.webshop;
 
 import com.olshevchenko.webshop.dao.jdbc.JdbcProductDao;
+import com.olshevchenko.webshop.dao.jdbc.JdbcUserDao;
 import com.olshevchenko.webshop.service.ProductService;
+import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.UserService;
+import com.olshevchenko.webshop.web.filter.SecurityFilter;
 import com.olshevchenko.webshop.web.utils.DataSourceFactory;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
 import com.olshevchenko.webshop.web.utils.PropertiesReader;
@@ -18,6 +22,7 @@ public class ServiceLocator {
     static {
         Properties properties = new PropertiesReader().getProperties("application.properties");
         String HTML_DIR = properties.getProperty("html.directory");
+        int cookieLifeTime = Integer.parseInt(properties.getProperty("cookie.ttl.seconds"));
 
         PageGenerator pageGenerator = new PageGenerator(HTML_DIR);
         CONTEXT.put(PageGenerator.class, pageGenerator);
@@ -26,18 +31,23 @@ public class ServiceLocator {
         DataSource dataSource = dataSourceFactory.createDataSource();
 
         JdbcProductDao jdbcProductDao = new JdbcProductDao(dataSource);
-
         ProductService productService = new ProductService(jdbcProductDao);
         CONTEXT.put(ProductService.class, productService);
 
+        JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+        UserService userService = new UserService(jdbcUserDao);
+        CONTEXT.put(UserService.class, userService);
+
+        SecurityService securityService = new SecurityService(cookieLifeTime);
+        CONTEXT.put(SecurityService.class, securityService);
+
+        SecurityFilter securityFilter = new SecurityFilter();
+        CONTEXT.put(SecurityFilter.class, securityFilter);
     }
 
     public static <T> T get(Class<T> clazz) {
         return clazz.cast(CONTEXT.get(clazz));
     }
-
-
-
 
 
 }

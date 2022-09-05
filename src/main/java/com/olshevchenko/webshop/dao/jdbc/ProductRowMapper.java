@@ -16,13 +16,12 @@ public class ProductRowMapper {
         String description = resultSet.getString("description");
         double price  = resultSet.getDouble("price");
         Timestamp creationDate = resultSet.getTimestamp("creation_date");
-        Product product = Product.builder().
+        return Product.builder().
                 id(id)
                 .name(name)
                 .description(description)
                 .price(price)
                 .creationDate(creationDate.toLocalDateTime())
                 .build();
-        return product;
     }
 }

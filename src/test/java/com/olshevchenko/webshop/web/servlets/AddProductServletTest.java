@@ -1,6 +1,5 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.dao.ProductDao;
 import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.ProductService;
 import org.junit.jupiter.api.BeforeAll;

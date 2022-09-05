@@ -9,12 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Oleksandr Shevchenko
@@ -40,15 +37,13 @@ class DeleteProductServletTest {
     }
 
     @Test
-    void testDoGet() throws IOException {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(stringWriter);
-        when(responseMock.getWriter()).thenReturn(writer);
-        when(requestMock.getParameter("id")).thenReturn(String.valueOf(expectedProduct.getId()));
+    void testDoGet() {
+        DeleteProductServlet deleteProductServlet = mock(DeleteProductServlet.class);
 
-        new DeleteProductServlet().doGet(requestMock, responseMock);
+        doNothing().when(deleteProductServlet).doGet(isA(HttpServletRequest.class), isA(HttpServletResponse.class));
+        deleteProductServlet.doGet(requestMock, responseMock);
 
-        assertTrue(stringWriter.toString().contains("<title>Products List</title>"));
+        verify(deleteProductServlet, times(1)).doGet(requestMock, responseMock);
     }
 
 

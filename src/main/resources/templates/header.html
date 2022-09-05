@@ -1,0 +1,24 @@
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="d-flex flex-row-reverse justify-content-between align-items-center">
+                <div class="p-2">
+                    <#if session??>
+                        <a href="/users/edit?id=${session.user.id}" class="btn btn-outline-dark">Edit Personal Info</a>
+                        <a href="/logout" class="btn btn-outline-dark">Logout</a>
+                        <a href="/products/cart" type="button" class="btn btn-outline-dark" >Shopping Cart</a>
+                    <#else>
+                        <a href="/login" class="btn btn-outline-dark">Login</a>
+                    </#if>
+                </div>
+                <div class="p-2 " >
+                    <#if session??>
+                        <strong>Logged as: ${session.user.email}</strong>
+                    <#else>
+                        <strong>You are not logged yet!</strong>
+                    </#if>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -47,7 +47,7 @@ class EditProductServletTest {
     }
 
     @Test
-    void testDoGet() throws IOException {
+    void testDoGet() {
         EditProductServlet editProductServletMock = mock(EditProductServlet.class);
 
         doNothing().when(editProductServletMock).doGet(isA(HttpServletRequest.class), isA(HttpServletResponse.class));

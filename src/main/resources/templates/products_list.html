@@ -12,13 +12,16 @@
     <title>Products List</title>
 </head>
 <body>
+<#include "/header.html">
+<#if msgSuccess??>
+    <div class="container" align="center">
+        </br></br></br></br></br></br>
+        <p align="center"><strong>${msgSuccess}</strong></p>
 
-<header>
-
-</header>
-
-
-
+        </br></br>
+        <p align='center'><a href='/products'>to product list -></a></p>
+    </div>
+<#else>
 </br>
 <h1 align="center">Products List</h1>
 </br>
@@ -34,7 +37,9 @@
             <th scope="col">Description</th>
             <th scope="col">Price</th>
             <th scope="col">Creation Date</th>
+            <#if session?? && session.user.role == "ADMIN">
             <th scope="col ">Options</th>
+            </#if>
         </tr>
         </thead>
         <tbody>
@@ -44,36 +49,34 @@
                     <td>${product.name}</td>
                     <td>${product.description}</td>
                     <td>${product.price?string["0.00"]}</td>
-                    <td>${product.creationDate?datetime("yyyy-MM-dd")?string["dd.MM.yyyy, HH:mm"]}</td>
+                    <td>${product.creationDate}</td>
                     <td>
-
-                        <a href='/products/delete?id=${product.id}' type="button" class="btn btn-outline-dark">Delete</a>
-                        <a href='/products/edit?id=${product.id}' type="button" class="btn btn-outline-dark">Edit</a>
-
+                        <#if session?? && session.user.role == "ADMIN">
+                            <a href='/products/delete?id=${product.id}' type="button" class="btn btn-outline-dark">Delete</a>
+                            <a href='/products/edit?id=${product.id}' type="button" class="btn btn-outline-dark">Edit</a>
+                        </#if>
+                        <#if session?? && (session.user.role == "ADMIN" || session.user.role == "USER")>
+                            <form method="post" action='/products' style="display:inline;" >
+                                <input type="hidden" name="id" value="${product.id}">
+                                <input type="submit" value="Add to cart" class="btn btn-outline-dark" id="btn" >
+                            </form>
+                        </#if>
                     </td>
                 </tr>
             </#list>
         </tbody>
     </table>
 
-
-
-<div align="center">
-    </br>
-    <a href="/products/add" type="button" class="btn btn-outline-dark" >Add new product</a>
-</div>
-
-    <#if msgSuccess??>
-    <div class="container" align="center">
-        </br></br>
-        <p align="center"><strong>${msgSuccess}</strong></p>
-
-        </br></br>
-        <p align='center'><a href='/products'>to product list -></a></p>
+    <div align="center">
+        </br>
+        <#if session?? && session.user.role == "ADMIN">
+            <a href="/products/add" type="button" class="btn btn-outline-dark" >Add new product</a>
+        </#if>
     </div>
-    <#else>
-    </#if>
-</div>
+
+
+    </div>
+</#if>
 
 <!-- Optional JavaScript; choose one of the two! -->
 

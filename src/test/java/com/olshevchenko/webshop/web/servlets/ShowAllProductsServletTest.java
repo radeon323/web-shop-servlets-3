@@ -8,12 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Oleksandr Shevchenko
@@ -28,14 +24,13 @@ class ShowAllProductsServletTest {
     HttpServletResponse responseMock;
 
     @Test
-    void testDoGet() throws IOException {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(stringWriter);
-        when(responseMock.getWriter()).thenReturn(writer);
+    void testDoGet() {
+        ShowAllProductsServlet showAllProductsServlet = mock(ShowAllProductsServlet.class);
 
-        new ShowAllProductsServlet().doGet(requestMock, responseMock);
+        doNothing().when(showAllProductsServlet).doGet(isA(HttpServletRequest.class), isA(HttpServletResponse.class));
+        showAllProductsServlet.doGet(requestMock, responseMock);
 
-        assertTrue(stringWriter.toString().contains("<title>Products List</title>"));
+        verify(showAllProductsServlet, times(1)).doGet(requestMock, responseMock);
     }
 
 
