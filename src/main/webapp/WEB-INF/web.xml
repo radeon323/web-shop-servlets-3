@@ -47,8 +47,28 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>productCartServlet</servlet-name>
-        <url-pattern>/products/cart</url-pattern>
-        <url-pattern>/products/cart/</url-pattern>
+        <url-pattern>/cart</url-pattern>
+        <url-pattern>/cart/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>deleteFromCartServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.DeleteFromCartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteFromCartServlet</servlet-name>
+        <url-pattern>/cart/delete</url-pattern>
+        <url-pattern>/cart/delete/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>updateCartServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.UpdateCartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updateCartServlet</servlet-name>
+        <url-pattern>/cart/update</url-pattern>
+        <url-pattern>/cart/update/</url-pattern>
     </servlet-mapping>
 
 

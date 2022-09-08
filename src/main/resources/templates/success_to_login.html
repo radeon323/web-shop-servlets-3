@@ -1,0 +1,14 @@
+<#if msgSuccess??>
+    <div class="container" align="center">
+        </br></br>
+        <p align="center"><strong>${msgSuccess}</strong></p>
+        </br></br>
+        <p align='center'><a href='/login' type="button" class="btn btn-outline-dark">to login page -></a></p>
+    </div>
+<#elseif errorMsg??>
+    <div class="container" align="center">
+        </br></br>
+        <p align="center"><strong>${errorMsg}</strong></p>
+    </div>
+<#else>
+</#if>

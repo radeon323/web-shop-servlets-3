@@ -60,20 +60,7 @@
 
         </div>
 
-        <#if msgSuccess??>
-            <div class="container" align="center">
-                </br></br>
-                <p align="center"><strong>${msgSuccess}</strong></p>
-                </br></br>
-                <p align='center'><a href='/products'>to product list -></a></p>
-            </div>
-        <#elseif errorMsg??>
-            <div class="container" align="center">
-                </br></br>
-                <p align="center"><strong>${errorMsg}</strong></p>
-            </div>
-        <#else>
-        </#if>
+        <#include "/success_to_products_list.html">
 
     </form>
 

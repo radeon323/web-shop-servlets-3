@@ -23,5 +23,20 @@ public class CartService {
                         () -> cart.add(new CartItem(product, 1)));
     }
 
+    public void removeFromCart(List<CartItem> cart, int id) {
+        CartItem cartItem = cart.stream()
+                .filter(item -> item.getProduct().getId() == id)
+                .findFirst()
+                .orElse(null);
+        cart.remove(cartItem);
+    }
+
+    public void updateQuantity(List<CartItem> cart, int id, int quantity) {
+        cart.stream()
+                .filter(item -> item.getProduct().getId() == id)
+                .findFirst()
+                .ifPresent(item -> item.setQuantity(quantity));
+    }
+
 
 }

@@ -53,6 +53,11 @@ public class ResponseWriter {
         writeSuccessResponse(response, filename, msgSuccess, parameters);
     }
 
+    public static void quantityUpdatedResponse(HttpServletResponse response, String filename, Map<String, Object> parameters) {
+        String msgSuccess = "Quantity updated!";
+        writeSuccessResponse(response, filename, msgSuccess, parameters);
+    }
+
     @SneakyThrows
     public static void writeErrorResponse(HttpServletResponse response, String filename, String errorMsg, Map<String, Object> parameters) {
         parameters.put("errorMsg", errorMsg);

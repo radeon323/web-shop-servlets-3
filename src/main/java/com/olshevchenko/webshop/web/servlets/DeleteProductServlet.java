@@ -5,8 +5,6 @@ import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
-import lombok.SneakyThrows;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +18,9 @@ import java.util.List;
 public class DeleteProductServlet extends HttpServlet {
     private static final String pageFileName = "products_list.html";
     private final ProductService productService = ServiceLocator.get(ProductService.class);
-    private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
     private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
-    @SneakyThrows
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         HashMap<String, Object> parameters = new HashMap<>();
         List<Product> products = productService.findAll();

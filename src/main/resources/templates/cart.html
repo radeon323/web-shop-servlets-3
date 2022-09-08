@@ -29,47 +29,72 @@
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Total sum</th>
+            <th scope="col">Sum</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
+        <#assign total=0>
         <#list cartItems as cartItem>
+        <form action="/cart/update" method="POST">
                     <tr >
                         <th scope="row">${cartItem.product.id}</th>
                         <td>${cartItem.product.name}</td>
                         <td>${cartItem.product.price?string["0.00"]}</td>
                         <td>
-                            <input required type="number" step="1" min="1" name="quantity" placeholder="${cartItem.quantity}" >
+                            <input type="number" step="1" min="1" name="quantity" placeholder="${cartItem.quantity}" >
                         </td>
                         <td>
-                            ${cartItem.product.price * cartItem.quantity}
+                            <#assign price=cartItem.product.price quantity=cartItem.quantity>
+
+                            <#function sum price quantity>
+                            <#return (price * quantity)>
+                            </#function>
+
+                            <#assign total=total + sum(price, quantity)>
+
+                            ${sum(price, quantity)}
                         </td>
                         <td>
                             <a href='/cart/delete?id=${cartItem.product.id}' type="button" class="btn btn-outline-dark">Delete</a>
-                            <a href='/cart/update?id=${cartItem.product.id}' type="button" class="btn btn-outline-dark">Update</a>
+                            <input type="hidden" value="${cartItem.product.id}" name="id">
+                            <button class="btn btn-outline-dark" type="submit">Update</button>
                         </td>
                     </tr>
+        </form>
         </#list>
+        <tr >
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total sum:</th>
+            <th>${total}</th>
+            <th></th>
+
+        </tr>
         </tbody>
     </table>
 
 
-
-<div align="center">
-    </br>
-    <a href="/products/cart" type="button" class="btn btn-outline-dark" >Purchase</a>
-</div>
-    <#if msgSuccess??>
-    <div class="container" align="center">
-        </br></br>
-        <p align="center"><strong>${msgSuccess}</strong></p>
-
-        </br></br>
-        <p align='center'><a href='/'>to product list -></a></p>
+    <div align="center">
+        </br>
+        <a href='/products' type="button" class="btn btn-outline-dark">back to products list -></a>
+        <a href="/products/cart" type="button" class="btn btn-outline-dark" >Purchase</a>
     </div>
+
+    <#if msgSuccess??>
+        <div class="container" align="center">
+            </br></br>
+            <p align="center"><strong>${msgSuccess}</strong></p>
+        </div>
+    <#elseif errorMsg??>
+        <div class="container" align="center">
+            </br></br>
+            <p align="center"><strong>${errorMsg}</strong></p>
+        </div>
     <#else>
     </#if>
+
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
