@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
@@ -24,16 +25,17 @@ public class JdbcUserDao implements UserDao {
     private static final String UPDATE_BY_ID_SQL = "UPDATE users SET email = ?, password = ?, gender = ?, firstName = ?, lastName = ?, about = ?, age = ?, role = ? WHERE id = ?;";
 
     @Override
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
                 preparedStatement.setInt(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return USER_ROW_MAPPER.mapRow(resultSet);
+                    return Optional.of(USER_ROW_MAPPER.mapRow(resultSet));
+                } else {
+                    return Optional.empty();
                 }
             }
-            return null;
         } catch (SQLException e) {
             log.error("Cannot execute query: {} ", FIND_BY_ID_SQL, e);
             throw new RuntimeException(e);
@@ -41,16 +43,17 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_SQL)) {
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return USER_ROW_MAPPER.mapRow(resultSet);
+                    return Optional.of(USER_ROW_MAPPER.mapRow(resultSet));
+                } else {
+                    return Optional.empty();
                 }
             }
-            return null;
         } catch (SQLException e) {
             log.error("Cannot execute query: {} ", FIND_BY_EMAIL_SQL, e);
             throw new RuntimeException(e);

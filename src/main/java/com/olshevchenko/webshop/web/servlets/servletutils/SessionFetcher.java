@@ -22,14 +22,16 @@ public class SessionFetcher {
     }
 
     public Session getSession(HttpServletRequest request) {
+        Session session = null;
         String userToken = getUserToken(request);
         if (userToken != null && securityService.isTokenValid(userToken)) {
-            return securityService.getSessions().get(userToken);
+            Map<String, Session> sessions = securityService.getSessions();
+            session = sessions.get(userToken);
         }
-        return null;
+        return session;
     }
 
-    private String getUserToken(HttpServletRequest request) {
+    String getUserToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

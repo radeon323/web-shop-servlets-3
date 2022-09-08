@@ -28,10 +28,10 @@ class AddProductServletTest {
     private final AddProductServlet addProductServlet = new AddProductServlet();
 
     @Mock
-    HttpServletRequest requestMock;
+    private HttpServletRequest requestMock;
 
     @Mock
-    HttpServletResponse responseMock;
+    private HttpServletResponse responseMock;
 
     @BeforeAll
     static void beforeAll() {

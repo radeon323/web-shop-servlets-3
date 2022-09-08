@@ -42,6 +42,17 @@
 
 
     <servlet>
+        <servlet-name>productCartServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.ProductCartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productCartServlet</servlet-name>
+        <url-pattern>/products/cart</url-pattern>
+        <url-pattern>/products/cart/</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
         <servlet-name>registerServlet</servlet-name>
         <servlet-class>com.olshevchenko.webshop.web.servlets.RegisterServlet</servlet-class>
     </servlet>

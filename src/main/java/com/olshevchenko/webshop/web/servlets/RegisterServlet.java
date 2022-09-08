@@ -4,8 +4,10 @@ import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.entity.Role;
 import com.olshevchenko.webshop.entity.User;
+import com.olshevchenko.webshop.exception.FieldsNotFilledException;
 import com.olshevchenko.webshop.service.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
+import com.olshevchenko.webshop.web.servlets.servletutils.RequestExtractor;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Oleksandr Shevchenko
@@ -41,19 +44,24 @@ public class RegisterServlet extends HttpServlet {
     }
 
     Optional<User> validateAndGetUser(HttpServletRequest request, HttpServletResponse response) {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        boolean isUserExist = userService.findByEmail(email) != null;
-
-        if (isUserExist) {
-            ResponseWriter.writeUserExistErrorResponse(response, pageFileName, new HashMap<>());
+        String email;
+        String password;
+        try {
+            email = RequestExtractor.getStringFromRequest(request, "email");
+            password = RequestExtractor.getStringFromRequest(request, "password");
+        } catch (FieldsNotFilledException e) {
+            ResponseWriter.writeFieldsErrorResponse(response, pageFileName, new HashMap<>());
+            return Optional.empty();
         }
 
-        if (!isUserExist && !email.isEmpty() && !password.isEmpty()) {
-            Gender gender = Optional.of(Gender.valueOf(request.getParameter("gender").toUpperCase())).orElse(Gender.MALE);
-            String firstName = Optional.ofNullable(request.getParameter("firstName")).orElse("");
-            String lastName = Optional.ofNullable(request.getParameter("lastName")).orElse("");
-            String about = Optional.ofNullable(request.getParameter("about")).orElse("");
+        if (userService.findByEmail(email).isPresent()) {
+            ResponseWriter.writeUserExistErrorResponse(response, pageFileName, new HashMap<>());
+            return Optional.empty();
+        } else {
+            Gender gender = Gender.valueOf(Optional.of(request.getParameter("gender").toUpperCase()).filter(Predicate.not(String::isEmpty)).orElse("MALE"));
+            String firstName = Optional.ofNullable(request.getParameter("firstName")).filter(Predicate.not(String::isEmpty)).orElse("");
+            String lastName = Optional.ofNullable(request.getParameter("lastName")).filter(Predicate.not(String::isEmpty)).orElse("");
+            String about = Optional.ofNullable(request.getParameter("about")).filter(Predicate.not(String::isEmpty)).orElse("");
             int age = StringParser.parseStringToInteger(request.getParameter("age"));
 
             User user = User.builder().
@@ -66,21 +74,14 @@ public class RegisterServlet extends HttpServlet {
                     .age(age)
                     .role(Role.USER)
                     .build();
-
             return Optional.of(user);
-        } else {
-            ResponseWriter.writeFieldsErrorResponse(response, pageFileName, new HashMap<>());
-            return Optional.empty();
         }
     }
 
     @SneakyThrows
     void addUser(User user, HttpServletResponse response) {
         userService.add(user);
-        String msgSuccess = String.format("User <i>%s</i> was successfully registered!", user.getEmail());
-        Map<String, Object> parameters = Map.of("msgSuccess", msgSuccess);
-        String page = pageGenerator.getPage(pageFileName, parameters);
-        response.getWriter().write(page);
+        ResponseWriter.writeUserRegisteredResponse(response, pageFileName, new HashMap<>(), user.getEmail());
     }
 
 

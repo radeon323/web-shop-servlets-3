@@ -18,10 +18,10 @@ import static org.mockito.Mockito.*;
 class ShowAllProductsServletTest {
 
     @Mock
-    HttpServletRequest requestMock;
+    private HttpServletRequest requestMock;
 
     @Mock
-    HttpServletResponse responseMock;
+    private HttpServletResponse responseMock;
 
     @Test
     void testDoGet() {

@@ -1,7 +1,10 @@
 package com.olshevchenko.webshop.service;
 
+import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.entity.User;
+import com.olshevchenko.webshop.exception.PasswordIncorrectException;
+import com.olshevchenko.webshop.exception.UserNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @RequiredArgsConstructor
 public class SecurityService {
+    private final UserService userService = ServiceLocator.get(UserService.class);
     private final Map<String, Session> sessions = new ConcurrentHashMap<>();
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
     private final int cookieTtlMinutes;
@@ -47,7 +51,14 @@ public class SecurityService {
 
     public boolean checkPassword(User user, String password) {
         String saltedHashedPassword = providePasswordHashAndSalt(password);
-        return saltedHashedPassword.equals(user.getPassword());
+        if (!saltedHashedPassword.equals(user.getPassword())) {
+            throw new PasswordIncorrectException("Incorrect password!");
+        }
+        return true;
+    }
+
+    public User getUser(String email) {
+        return userService.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Could not find user by email: " + email));
     }
 
 

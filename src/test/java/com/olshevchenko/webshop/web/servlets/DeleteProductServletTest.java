@@ -21,10 +21,10 @@ class DeleteProductServletTest {
     private static Product expectedProduct;
 
     @Mock
-    HttpServletRequest requestMock;
+    private HttpServletRequest requestMock;
 
     @Mock
-    HttpServletResponse responseMock;
+    private HttpServletResponse responseMock;
 
     @BeforeAll
     static void beforeAll() {

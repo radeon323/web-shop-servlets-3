@@ -31,10 +31,10 @@ class EditProductServletTest {
     private final EditProductServlet editProductServlet = new EditProductServlet();
 
     @Mock
-    HttpServletRequest requestMock;
+    private HttpServletRequest requestMock;
 
     @Mock
-    HttpServletResponse responseMock;
+    private HttpServletResponse responseMock;
 
     @BeforeAll
     static void beforeAll() {

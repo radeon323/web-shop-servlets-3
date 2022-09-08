@@ -33,6 +33,11 @@ public class ResponseWriter {
         writeErrorResponse(response, filename, errorMsg, parameters);
     }
 
+    public static void writeUserRegisteredResponse(HttpServletResponse response, String filename, Map<String, Object> parameters, String email) {
+        String msgSuccess = String.format("User <i>%s</i> was successfully registered!", email);
+        writeSuccessResponse(response, filename, msgSuccess, parameters);
+    }
+
     public static void productAddedResponse(HttpServletResponse response, String filename, Map<String, Object> parameters, String productName) {
         String msgSuccess = String.format("Product <i>%s</i> was successfully added!", productName);
         writeSuccessResponse(response, filename, msgSuccess, parameters);

@@ -2,6 +2,7 @@ package com.olshevchenko.webshop;
 
 import com.olshevchenko.webshop.dao.jdbc.JdbcProductDao;
 import com.olshevchenko.webshop.dao.jdbc.JdbcUserDao;
+import com.olshevchenko.webshop.service.CartService;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.service.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
@@ -40,6 +41,9 @@ public class ServiceLocator {
 
         SecurityService securityService = new SecurityService(cookieLifeTime);
         CONTEXT.put(SecurityService.class, securityService);
+
+        CartService cartService = new CartService(productService);
+        CONTEXT.put(CartService.class, cartService);
 
         SecurityFilter securityFilter = new SecurityFilter();
         CONTEXT.put(SecurityFilter.class, securityFilter);

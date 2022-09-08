@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -45,16 +47,18 @@ class UserServiceTest {
 
     @Test
     void testFindById() {
-        when(userDaoMock.findById(1)).thenReturn(expectedUser);
-        User actualUser = userService.findById(1);
+        when(userDaoMock.findById(1)).thenReturn(Optional.ofNullable(expectedUser));
+        Optional<User> optionalUser = userService.findById(1);
+        User actualUser = optionalUser.get();
         assertEquals(expectedUser, actualUser);
         verify(userDaoMock, times(1)).findById(1);
     }
 
     @Test
     void testFindByEmail() {
-        when(userDaoMock.findByEmail("darthvader@gmail.com")).thenReturn(expectedUser);
-        User actualUser = userService.findByEmail("darthvader@gmail.com");
+        when(userDaoMock.findByEmail("darthvader@gmail.com")).thenReturn(Optional.ofNullable(expectedUser));
+        Optional<User> optionalUser = userService.findByEmail("darthvader@gmail.com");
+        User actualUser = optionalUser.get();
         assertEquals(expectedUser, actualUser);
         verify(userDaoMock, times(1)).findByEmail("darthvader@gmail.com");
     }

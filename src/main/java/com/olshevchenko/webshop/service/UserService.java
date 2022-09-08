@@ -2,7 +2,10 @@ package com.olshevchenko.webshop.service;
 
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
+import com.olshevchenko.webshop.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
@@ -11,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     private final UserDao userDao;
 
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         return userDao.findById(id);
     }
 
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }
 
