@@ -58,7 +58,8 @@ public class SecurityService {
     }
 
     public User getUser(String email) {
-        return userService.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Could not find user by email: " + email));
+        return userService.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Could not find user by email: " + email));
     }
 
 

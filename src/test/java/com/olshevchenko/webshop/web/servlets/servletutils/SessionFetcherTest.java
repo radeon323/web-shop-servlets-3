@@ -80,4 +80,13 @@ class SessionFetcherTest {
         String actualToken = sessionFetcher.getUserToken(requestMock);
         assertEquals(token, actualToken);
     }
+
+    @Test
+    void testGetUserTokenIfCookiesNull() {
+        Cookie[] cookies = null;
+        when(requestMock.getCookies()).thenReturn(cookies);
+        String actualToken = sessionFetcher.getUserToken(requestMock);
+        assertNull(actualToken);
+    }
+
 }
