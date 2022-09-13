@@ -8,6 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
@@ -24,7 +26,7 @@ class ShowAllProductsServletTest {
     private HttpServletResponse responseMock;
 
     @Test
-    void testDoGet() {
+    void testDoGet() throws IOException {
         ShowAllProductsServlet showAllProductsServlet = mock(ShowAllProductsServlet.class);
 
         doNothing().when(showAllProductsServlet).doGet(isA(HttpServletRequest.class), isA(HttpServletResponse.class));

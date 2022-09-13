@@ -6,6 +6,7 @@ import com.olshevchenko.webshop.service.SecurityService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -33,13 +34,11 @@ public class SessionFetcher {
 
     String getUserToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
+        return Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals("user-token"))
+                .findFirst()
+                .map(Cookie::getValue).orElseThrow();
     }
+
+
 }

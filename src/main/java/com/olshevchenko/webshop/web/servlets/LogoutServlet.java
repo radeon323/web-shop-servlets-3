@@ -18,11 +18,13 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionFetcher.getSession(request);
-        String userToken = session.getToken();
-        Cookie cookie = new Cookie("user-token", null);
-        cookie.setMaxAge(0);
-        securityService.removeSession(userToken);
-        response.addCookie(cookie);
+        if (session != null) {
+            String userToken = session.getToken();
+            Cookie cookie = new Cookie("user-token", null);
+            cookie.setMaxAge(0);
+            securityService.removeSession(userToken);
+            response.addCookie(cookie);
+        }
         response.sendRedirect("/products");
     }
 
