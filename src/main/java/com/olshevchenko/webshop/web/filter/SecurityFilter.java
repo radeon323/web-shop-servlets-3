@@ -20,7 +20,16 @@ import java.util.List;
 public class SecurityFilter implements Filter {
     private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
     private final SessionFetcher sessionFetcher = new SessionFetcher();
-    private final List<String> allowedPaths = List.of("/login", "/login/", "/logout", "/logout/", "/register", "/register/");
+    private final List<String> allowedPaths;
+
+    //TODO Question: If I transfer allowedPaths from properties through constructor, I get java.lang.NoSuchMethodException
+    public SecurityFilter() {
+        this.allowedPaths = List.of("/login", "/login/", "/logout", "/logout/", "/register", "/register/");
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -35,7 +44,10 @@ public class SecurityFilter implements Filter {
             }
         }
 
-        if (isAuth(httpServletRequest)) {
+        Session session = sessionFetcher.getSession(httpServletRequest);
+
+        if (isAuth(session)) {
+            httpServletRequest.setAttribute("session", session);
             log.info("Authorized!");
             chain.doFilter(request, response);
         } else {
@@ -44,8 +56,7 @@ public class SecurityFilter implements Filter {
 
     }
 
-    private boolean isAuth(HttpServletRequest httpServletRequest) {
-        Session session = sessionFetcher.getSession(httpServletRequest);
+    private boolean isAuth(Session session) {
         if (session == null) {
             return false;
         }
@@ -53,10 +64,6 @@ public class SecurityFilter implements Filter {
         boolean isUser = session.getUser().getRole().equals(Role.USER);
         boolean isTokenValid = securityService.isTokenValid(session.getToken());
         return (isAdmin || isUser) && isTokenValid;
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
     }
 
     @Override

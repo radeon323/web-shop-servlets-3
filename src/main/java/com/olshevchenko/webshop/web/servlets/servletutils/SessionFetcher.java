@@ -1,7 +1,6 @@
 package com.olshevchenko.webshop.web.servlets.servletutils;
 
 import com.olshevchenko.webshop.ServiceLocator;
-import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.service.SecurityService;
 
@@ -9,7 +8,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko

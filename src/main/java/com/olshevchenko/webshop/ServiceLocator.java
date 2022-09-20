@@ -24,6 +24,7 @@ public class ServiceLocator {
         Properties properties = new PropertiesReader().getProperties("application.properties");
         String HTML_DIR = properties.getProperty("html.directory");
         int cookieLifeTime = Integer.parseInt(properties.getProperty("cookie.ttl.seconds"));
+        List<String> allowedPaths = Arrays.asList(properties.getProperty("security.filter.url.exclude").split(","));
 
         PageGenerator pageGenerator = new PageGenerator(HTML_DIR);
         CONTEXT.put(PageGenerator.class, pageGenerator);
