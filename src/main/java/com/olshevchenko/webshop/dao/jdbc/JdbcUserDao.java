@@ -97,12 +97,12 @@ public class JdbcUserDao implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setObject(3, user.getGender());
+            preparedStatement.setObject(3, user.getGender().toString(), Types.OTHER);
             preparedStatement.setString(4, user.getFirstName());
             preparedStatement.setString(5, user.getLastName());
             preparedStatement.setString(6, user.getAbout());
             preparedStatement.setInt(7, user.getAge());
-            preparedStatement.setObject(8, user.getRole());
+            preparedStatement.setObject(8, user.getRole().toString(), Types.OTHER);
             preparedStatement.setInt(9, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {

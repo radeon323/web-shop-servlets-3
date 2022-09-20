@@ -7,11 +7,11 @@ import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
-import lombok.SneakyThrows;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,8 +27,7 @@ public class EditProductServlet extends HttpServlet {
     private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
-    @SneakyThrows
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.findById(id);
         oldParameters.put("product", product);
@@ -67,7 +66,6 @@ public class EditProductServlet extends HttpServlet {
         }
     }
 
-    @SneakyThrows
     void editProduct(Product product, HttpServletResponse response, Map<String, Object> parameters) {
         productService.edit(product);
         ResponseWriter.productEditedResponse(response, pageFileName, parameters, product.getName());

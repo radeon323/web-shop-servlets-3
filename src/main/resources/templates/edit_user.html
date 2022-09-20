@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <#include "/html_parts/head_part.html">
+    <title>Edit Personal Info</title>
+</head>
+
+<body>
+<#include "/html_parts/header.html">
+<div class="container">
+    </br>
+    <h1 align="center">Edit Personal Info</h1>
+    </br>
+
+    <form action="/users/edit" method="POST">
+
+        <input type="hidden" value="${session.user.id}" name="id" />
+
+        <div class="row justify-content-center">
+            <div class="col-md-auto col-lg-3">
+                <input name="email" type="email" class="form-control" id="exampleInputEmail1" value="${session.user.email}">
+            </div>
+
+            <div class="col-md-auto col-lg-3 inputs">
+                <input name="password" type="password" class="form-control" id="password-input" >
+                <label>
+                    <input type="checkbox" class="showPassword" onclick="myFunction()" > show password
+                </label>
+            </div>
+        </div>
+
+
+        </br></br>
+
+        <div class="row justify-content-center">
+            <div class="col-md-auto col-lg-3">
+                <input name="firstName" type="text" class="form-control" id="firstName" value="${session.user.firstName}">
+            </div>
+            <div class="col-md-auto col-lg-3">
+                <input name="lastName" type="text" class="form-control" id="lastName" value="${session.user.lastName}">
+            </div>
+        </div>
+
+        </br></br>
+
+        <div class="row justify-content-center">
+            <div class="col-md-auto col-lg-3">
+                <select name="gender" style="width: 100%; height: 37px;">
+                    <option value="${session.user.gender}">${session.user.gender}</option>
+                </select>
+            </div>
+
+            <div class="col-md-auto col-lg-3">
+                <input name="age" type="number" step="1" min="1" class="form-control" id="age" value="${session.user.age}">
+            </div>
+        </div>
+
+        </br></br>
+
+        <div class="row justify-content-center">
+
+            <input style="width: 48.2%;" name="about" type="text" class="form-control" id="about" value="${session.user.about}">
+
+        </div>
+
+        <div class="container" align="center">
+            </br></br>
+            <a href='/products' type="button" class="btn btn-outline-dark">back to products list -></a>
+            <button class="btn btn-outline-dark" type="submit">Submit!</button>
+        </div>
+        </br>
+
+        <#include "/html_parts/success_to_products_list.html">
+    </form>
+
+</div>
+<#include "/html_parts/footer_script.html">
+
+<script>
+function myFunction() {
+  var x = document.getElementById("password-input");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+
+</body>
+</html>
+
+

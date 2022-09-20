@@ -1,5 +1,10 @@
 <web-app>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>showAllProductsServlet</servlet-name>
         <servlet-class>com.olshevchenko.webshop.web.servlets.ShowAllProductsServlet</servlet-class>
@@ -100,6 +105,16 @@
         <servlet-name>logoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
         <url-pattern>/logout/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>editUserServlet</servlet-name>
+        <servlet-class>com.olshevchenko.webshop.web.servlets.EditUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editUserServlet</servlet-name>
+        <url-pattern>/users/edit</url-pattern>
+        <url-pattern>/users/edit/</url-pattern>
     </servlet-mapping>
 
 

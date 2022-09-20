@@ -11,11 +11,11 @@ import com.olshevchenko.webshop.web.servlets.servletutils.RequestExtractor;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
-import lombok.SneakyThrows;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -30,8 +30,7 @@ public class RegisterServlet extends HttpServlet {
     private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
 
     @Override
-    @SneakyThrows
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String page = pageGenerator.getPage(pageFileName);
         response.getWriter().println(page);
     }
@@ -77,7 +76,6 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    @SneakyThrows
     void addUser(User user, HttpServletResponse response) {
         userService.add(user);
         ResponseWriter.writeUserRegisteredResponse(response, pageFileName, new HashMap<>(), user.getEmail());
