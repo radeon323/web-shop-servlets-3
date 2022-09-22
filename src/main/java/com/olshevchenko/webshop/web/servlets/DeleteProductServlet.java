@@ -2,9 +2,9 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Product;
+import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
-import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +18,6 @@ import java.util.List;
 public class DeleteProductServlet extends HttpServlet {
     private static final String pageFileName = "products_list.html";
     private final ProductService productService = ServiceLocator.get(ProductService.class);
-    private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -27,7 +26,8 @@ public class DeleteProductServlet extends HttpServlet {
 
         parameters.put("products", products);
 
-        sessionFetcher.validateAndPutSessionToPageParameters(request, parameters);
+        Session session = (Session) request.getAttribute("session");
+        parameters.put("session", session);
 
         int id = Integer.parseInt(request.getParameter("id"));
         productService.remove(id);

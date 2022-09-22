@@ -2,9 +2,9 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Product;
+import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
-import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
 
@@ -24,12 +24,12 @@ public class AddProductServlet extends HttpServlet {
     private static final String pageFileName = "add_product.html";
     private final ProductService productService = ServiceLocator.get(ProductService.class);
     private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
-    private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         parameters.remove("msgSuccess");
-        sessionFetcher.validateAndPutSessionToPageParameters(request, parameters);
+        Session session = (Session) request.getAttribute("session");
+        parameters.put("session", session);
         String page = pageGenerator.getPage(pageFileName, parameters);
         response.getWriter().println(page);
     }

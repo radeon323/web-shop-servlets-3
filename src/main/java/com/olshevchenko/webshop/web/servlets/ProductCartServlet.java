@@ -4,7 +4,6 @@ import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.service.CartService;
-import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -21,14 +20,13 @@ public class ProductCartServlet extends HttpServlet {
     private static final String pageFileName = "cart.html";
     private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
     private final CartService cartService = ServiceLocator.get(CartService.class);
-    private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HashMap<String, Object> parameters = new HashMap<>();
 
-        sessionFetcher.validateAndPutSessionToPageParameters(request, parameters);
-        Session session = sessionFetcher.getSession(request);
+        Session session = (Session) request.getAttribute("session");
+        parameters.put("session", session);
 
         List<CartItem> cartItems = session.getCart();
         parameters.put("cartItems", cartItems);

@@ -71,14 +71,6 @@ class SecurityServiceTest {
         assertEquals(token.length(),generatedToken.length());
     }
 
-    //TODO mock the field Map!!!
-    @Test
-    void testRemoveSession() {
-        sessions.entrySet().removeIf(e -> e.getKey().equals(token));
-        when(sessions.containsKey(token)).thenReturn(false);
-        assertFalse(sessions.containsKey(token));
-    }
-
     @Test
     void testCheckPassword() {
         assertTrue(securityService.checkPassword(user, password));

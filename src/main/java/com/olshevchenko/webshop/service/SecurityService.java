@@ -7,6 +7,7 @@ import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Oleksandr Shevchenko
  */
+@Slf4j
 @Getter
 @RequiredArgsConstructor
 public class SecurityService {
@@ -41,12 +43,9 @@ public class SecurityService {
 
     public String generateTokenAndStartNewSession(User user) {
         String token = String.valueOf(UUID.randomUUID());
-        sessions.put(token, new Session(token, LocalDateTime.now().plusMinutes(cookieTtlMinutes), user));
+        Session session = new Session(token, LocalDateTime.now().plusMinutes(cookieTtlMinutes), user);
+        sessions.put(token, session);
         return token;
-    }
-
-    public void removeSession(String token) {
-        sessions.entrySet().removeIf(e -> e.getKey().equals(token));
     }
 
     public boolean checkPassword(User user, String password) {

@@ -11,7 +11,6 @@ import com.olshevchenko.webshop.service.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
 import com.olshevchenko.webshop.web.servlets.servletutils.RequestExtractor;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
-import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.web.utils.PageGenerator;
 
@@ -33,12 +32,12 @@ public class EditUserServlet extends HttpServlet {
     private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
     private final UserService userService = ServiceLocator.get(UserService.class);
     private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
-    private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            sessionFetcher.validateAndPutSessionToPageParameters(request, oldParameters);
+            Session session = (Session) request.getAttribute("session");
+            oldParameters.put("session", session);
             String page = pageGenerator.getPage(pageFileName, oldParameters);
             response.getWriter().write(page);
         } catch (UserNotFoundException e) {
@@ -54,7 +53,7 @@ public class EditUserServlet extends HttpServlet {
     }
 
     Optional<User> validateAndGetUser(HttpServletRequest request, HttpServletResponse response, Map<String, Object> parameters, Map<String, Object> oldParameters) {
-        Session session = sessionFetcher.getSession(request);
+        Session session = (Session) request.getAttribute("session");
         User oldUser = session.getUser();
 
         String email;
@@ -88,7 +87,9 @@ public class EditUserServlet extends HttpServlet {
                     .role(role)
                     .build();
             session.setUser(user);
-            sessionFetcher.validateAndPutSessionToPageParameters(request, parameters);
+
+            parameters.put("session", session);
+
             return Optional.of(user);
         } else {
             ResponseWriter.writeFieldsErrorResponse(response, pageFileName, oldParameters);
