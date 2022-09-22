@@ -25,7 +25,6 @@
         </tr>
         </thead>
         <tbody>
-        <#assign total=0>
         <#list cartItems as cartItem>
         <form action="/cart/update" method="POST">
                     <tr >
@@ -42,8 +41,6 @@
                             <#return (price * quantity)>
                             </#function>
 
-                            <#assign total=total + sum(price, quantity)>
-
                             ${sum(price, quantity)?string["0.00"]}
                         </td>
                         <td>
@@ -58,14 +55,13 @@
             <th></th>
             <th></th>
             <th></th>
-            <th>Total sum:</th>
-            <th>${total?string["0.00"]}</th>
+            <th>Total price:</th>
+            <th>${totalPrice?string["0.00"]}</th>
             <th></th>
 
         </tr>
         </tbody>
     </table>
-
 
     <div align="center">
         </br>
@@ -73,20 +69,9 @@
         <a href="/cart" type="button" class="btn btn-outline-dark" >Purchase</a>
     </div>
 
-    <#if msgSuccess??>
-        <div class="container" align="center">
-            </br></br>
-            <p align="center"><strong>${msgSuccess}</strong></p>
-        </div>
-    <#elseif errorMsg??>
-        <div class="container" align="center">
-            </br></br>
-            <p align="center"><strong>${errorMsg}</strong></p>
-        </div>
-    <#else>
-    </#if>
 
 </div>
 <#include "/html_parts/footer_script.html">
+
 </body>
 </html>

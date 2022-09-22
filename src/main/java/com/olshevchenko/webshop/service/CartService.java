@@ -38,5 +38,13 @@ public class CartService {
                 .ifPresent(item -> item.setQuantity(quantity));
     }
 
+    public double calculateTotalPrice(List<CartItem> cart) {
+        double total = 0;
+        for (CartItem item : cart) {
+            total = total + item.getProduct().getPrice() * item.getQuantity();
+        }
+        return total;
+    }
+
 
 }

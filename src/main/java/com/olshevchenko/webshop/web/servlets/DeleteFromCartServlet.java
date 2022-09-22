@@ -4,12 +4,12 @@ import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Session;
 import com.olshevchenko.webshop.service.CartService;
-import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.SessionFetcher;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,12 +17,11 @@ import java.util.List;
  * @author Oleksandr Shevchenko
  */
 public class DeleteFromCartServlet extends HttpServlet {
-    private static final String pageFileName = "cart.html";
     private final CartService cartService = ServiceLocator.get(CartService.class);
     private final SessionFetcher sessionFetcher = new SessionFetcher();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HashMap<String, Object> parameters = new HashMap<>();
 
         sessionFetcher.validateAndPutSessionToPageParameters(request, parameters);
@@ -34,6 +33,7 @@ public class DeleteFromCartServlet extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
         cartService.removeFromCart(cartItems, id);
-        ResponseWriter.productDeletedResponse(response, pageFileName, parameters, id);
+
+        response.sendRedirect("/cart");
     }
 }
