@@ -44,7 +44,7 @@ public class SecurityFilter implements Filter {
             }
         }
 
-        Session session = new Session();
+        Session session = null;
         String userToken = getUserToken(httpServletRequest);
         if (userToken != null) {
             session = securityService.getSessions().get(userToken);
