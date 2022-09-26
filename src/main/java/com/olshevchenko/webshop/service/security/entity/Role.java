@@ -1,4 +1,4 @@
-package com.olshevchenko.webshop.entity;
+package com.olshevchenko.webshop.service.security.entity;
 
 /**
  * @author Oleksandr Shevchenko

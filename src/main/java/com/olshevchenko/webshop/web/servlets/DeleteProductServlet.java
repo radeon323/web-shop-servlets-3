@@ -2,7 +2,7 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Product;
-import com.olshevchenko.webshop.entity.Session;
+import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 

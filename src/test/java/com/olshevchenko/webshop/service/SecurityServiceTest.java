@@ -1,9 +1,10 @@
 package com.olshevchenko.webshop.service;
 
 import com.olshevchenko.webshop.entity.Gender;
-import com.olshevchenko.webshop.entity.Role;
-import com.olshevchenko.webshop.entity.Session;
+import com.olshevchenko.webshop.service.security.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.entity.User;
+import com.olshevchenko.webshop.service.security.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Oleksandr Shevchenko
@@ -31,8 +31,11 @@ class SecurityServiceTest {
     @Mock
     private Map<String, Session> sessions = new ConcurrentHashMap<>();
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
-    private SecurityService securityService = new SecurityService(cookieTtlMinutes);
+    private SecurityService securityService = new SecurityService(userService, cookieTtlMinutes);
 
     @BeforeEach
     void init() {
@@ -54,26 +57,6 @@ class SecurityServiceTest {
         String expectedHashedAndSaltedPassword = user.getPassword();
         String actualHashedAndSaltedPassword = securityService.providePasswordHashAndSalt(password);
         assertEquals(expectedHashedAndSaltedPassword,actualHashedAndSaltedPassword);
-    }
-
-    //TODO mock the field Map!!!
-    @Test
-    void testIsTokenValid() {
-        when(sessions.containsKey(token)).thenReturn(true);
-        when(sessions.get(token)).thenReturn(session);
-
-        assertTrue(securityService.isTokenValid(token));
-    }
-
-    @Test
-    void testGenerateTokenAndStartNewSession() {
-        String generatedToken = securityService.generateTokenAndStartNewSession(user);
-        assertEquals(token.length(),generatedToken.length());
-    }
-
-    @Test
-    void testCheckPassword() {
-        assertTrue(securityService.checkPassword(user, password));
     }
 
 

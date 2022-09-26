@@ -13,15 +13,33 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <flyway.user>postgres</flyway.user>
+        <flyway.password>postgres</flyway.password>
+        <flyway.url>jdbc:postgresql://localhost:5432/webshop</flyway.url>
+
     </properties>
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.48.v20220622</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>8.5.13</version>
+                <configuration>
+                    <user>user</user>
+                    <password>password</password>
+                    <url>url</url>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

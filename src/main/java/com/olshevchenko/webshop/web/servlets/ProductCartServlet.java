@@ -2,9 +2,9 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.CartItem;
-import com.olshevchenko.webshop.entity.Session;
+import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.CartService;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

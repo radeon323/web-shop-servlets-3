@@ -1,4 +1,4 @@
-package com.olshevchenko.webshop.web.utils;
+package com.olshevchenko.webshop.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

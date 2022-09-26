@@ -4,12 +4,11 @@ import com.olshevchenko.webshop.dao.jdbc.JdbcProductDao;
 import com.olshevchenko.webshop.dao.jdbc.JdbcUserDao;
 import com.olshevchenko.webshop.service.CartService;
 import com.olshevchenko.webshop.service.ProductService;
-import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
-import com.olshevchenko.webshop.web.filter.SecurityFilter;
-import com.olshevchenko.webshop.web.utils.DataSourceFactory;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
-import com.olshevchenko.webshop.web.utils.PropertiesReader;
+import com.olshevchenko.webshop.utils.DataSourceFactory;
+import com.olshevchenko.webshop.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PropertiesReader;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -21,10 +20,12 @@ public class ServiceLocator {
     private static final Map<Class<?>, Object> CONTEXT = new HashMap<>();
 
     static {
-        Properties properties = new PropertiesReader().getProperties("application.properties");
+        PropertiesReader propertiesReader = new PropertiesReader("application.properties");
+        Properties properties = propertiesReader.getProperties();
         String HTML_DIR = properties.getProperty("html.directory");
-        int cookieLifeTime = Integer.parseInt(properties.getProperty("cookie.ttl.seconds"));
-        List<String> allowedPaths = Arrays.asList(properties.getProperty("security.filter.url.exclude").split(","));
+        int cookieTtlMinutes = Integer.parseInt(properties.getProperty("cookie.ttl.minutes"));
+
+        CONTEXT.put(PropertiesReader.class, propertiesReader);
 
         PageGenerator pageGenerator = new PageGenerator(HTML_DIR);
         CONTEXT.put(PageGenerator.class, pageGenerator);
@@ -40,14 +41,12 @@ public class ServiceLocator {
         UserService userService = new UserService(jdbcUserDao);
         CONTEXT.put(UserService.class, userService);
 
-        SecurityService securityService = new SecurityService(cookieLifeTime);
+        SecurityService securityService = new SecurityService(userService, cookieTtlMinutes);
         CONTEXT.put(SecurityService.class, securityService);
 
         CartService cartService = new CartService(productService);
         CONTEXT.put(CartService.class, cartService);
 
-        SecurityFilter securityFilter = new SecurityFilter();
-        CONTEXT.put(SecurityFilter.class, securityFilter);
     }
 
     public static <T> T get(Class<T> clazz) {

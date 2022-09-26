@@ -1,4 +1,4 @@
-package com.olshevchenko.webshop.service;
+package com.olshevchenko.webshop.service.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

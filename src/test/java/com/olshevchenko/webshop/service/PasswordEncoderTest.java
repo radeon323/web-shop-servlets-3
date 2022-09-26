@@ -1,5 +1,6 @@
 package com.olshevchenko.webshop.service;
 
+import com.olshevchenko.webshop.service.security.PasswordEncoder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

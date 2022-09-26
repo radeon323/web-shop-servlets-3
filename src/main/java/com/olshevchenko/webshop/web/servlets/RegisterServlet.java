@@ -2,21 +2,21 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Gender;
-import com.olshevchenko.webshop.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.FieldsNotFilledException;
-import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
 import com.olshevchenko.webshop.web.servlets.servletutils.RequestExtractor;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -48,12 +48,12 @@ public class RegisterServlet extends HttpServlet {
             email = RequestExtractor.getStringFromRequest(request, "email");
             password = RequestExtractor.getStringFromRequest(request, "password");
         } catch (FieldsNotFilledException e) {
-            ResponseWriter.writeFieldsErrorResponse(response, pageFileName, new HashMap<>());
+            ResponseWriter.writeFieldsErrorResponse(response, pageFileName, Collections.emptyMap());
             return Optional.empty();
         }
 
         if (userService.findByEmail(email).isPresent()) {
-            ResponseWriter.writeUserExistErrorResponse(response, pageFileName, new HashMap<>());
+            ResponseWriter.writeUserExistErrorResponse(response, pageFileName, Collections.emptyMap());
             return Optional.empty();
         } else {
             Gender gender = Gender.valueOf(Optional.of(request.getParameter("gender").toUpperCase()).filter(Predicate.not(String::isEmpty)).orElse("MALE"));
@@ -78,7 +78,7 @@ public class RegisterServlet extends HttpServlet {
 
     void addUser(User user, HttpServletResponse response) {
         userService.add(user);
-        ResponseWriter.writeUserRegisteredResponse(response, pageFileName, new HashMap<>(), user.getEmail());
+        ResponseWriter.writeUserRegisteredResponse(response, pageFileName, Collections.emptyMap(), user.getEmail());
     }
 
 

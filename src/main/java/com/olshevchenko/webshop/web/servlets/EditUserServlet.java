@@ -2,22 +2,23 @@ package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.entity.Gender;
-import com.olshevchenko.webshop.entity.Role;
-import com.olshevchenko.webshop.entity.Session;
+import com.olshevchenko.webshop.service.security.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.FieldsNotFilledException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
-import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.service.UserService;
 import com.olshevchenko.webshop.web.servlets.servletutils.RequestExtractor;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class EditUserServlet extends HttpServlet {
             String page = pageGenerator.getPage(pageFileName, oldParameters);
             response.getWriter().write(page);
         } catch (UserNotFoundException e) {
-            ResponseWriter.writeUserNotExistErrorResponse(response, pageFileName, new HashMap<>());
+            ResponseWriter.writeUserNotExistErrorResponse(response, pageFileName, Collections.emptyMap());
         }
     }
 

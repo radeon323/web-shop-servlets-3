@@ -1,7 +1,7 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.entity.Gender;
-import com.olshevchenko.webshop.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

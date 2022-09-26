@@ -1,16 +1,18 @@
 package com.olshevchenko.webshop.web.servlets;
 
 import com.olshevchenko.webshop.ServiceLocator;
-import com.olshevchenko.webshop.entity.User;
+import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
-import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PageGenerator;
 
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.HashMap;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
 /**
  * @author Oleksandr Shevchenko
@@ -32,18 +34,16 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
-            User user = securityService.getUser(email);
-            securityService.checkPassword(user, password);
-
-            String userToken = securityService.generateTokenAndStartNewSession(user);
-            Cookie cookie = new Cookie("user-token", userToken);
-            cookie.setMaxAge(securityService.getCookieTtlMinutes());
+            Session session = securityService.login(email, password);
+            Cookie cookie = new Cookie("user-token", session.getToken());
+            int cookieTtlMinutes = (int) (Math.round(((Duration.between(LocalDateTime.now(), session.getExpireDateTime()).getSeconds()) + 9.0) / 10 * 10) / 60);
+            cookie.setMaxAge(cookieTtlMinutes);
             response.addCookie(cookie);
             response.sendRedirect("/products");
         } catch (UserNotFoundException e) {
-            ResponseWriter.writeUserNotExistErrorResponse(response, pageFileName, new HashMap<>());
+            ResponseWriter.writeUserNotExistErrorResponse(response, pageFileName, Collections.emptyMap());
         } catch (PasswordIncorrectException e) {
-            ResponseWriter.passwordNotCorrectErrorResponse(response, pageFileName, new HashMap<>());
+            ResponseWriter.passwordNotCorrectErrorResponse(response, pageFileName, Collections.emptyMap());
         }
     }
 

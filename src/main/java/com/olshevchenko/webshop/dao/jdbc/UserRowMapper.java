@@ -1,7 +1,7 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.entity.Gender;
-import com.olshevchenko.webshop.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
 
 import java.sql.ResultSet;

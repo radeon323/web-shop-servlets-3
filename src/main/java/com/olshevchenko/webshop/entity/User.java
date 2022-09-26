@@ -1,5 +1,6 @@
 package com.olshevchenko.webshop.entity;
 
+import com.olshevchenko.webshop.service.security.entity.Role;
 import lombok.*;
 
 /**

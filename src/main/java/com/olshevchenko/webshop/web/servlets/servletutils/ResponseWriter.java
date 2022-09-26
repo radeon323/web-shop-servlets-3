@@ -1,7 +1,7 @@
 package com.olshevchenko.webshop.web.servlets.servletutils;
 
 import com.olshevchenko.webshop.ServiceLocator;
-import com.olshevchenko.webshop.web.utils.PageGenerator;
+import com.olshevchenko.webshop.utils.PageGenerator;
 import lombok.SneakyThrows;
 
 import javax.servlet.http.HttpServletResponse;

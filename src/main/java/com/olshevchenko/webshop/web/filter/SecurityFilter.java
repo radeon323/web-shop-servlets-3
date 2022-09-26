@@ -1,9 +1,9 @@
 package com.olshevchenko.webshop.web.filter;
 
 import com.olshevchenko.webshop.ServiceLocator;
-import com.olshevchenko.webshop.entity.Role;
-import com.olshevchenko.webshop.entity.Session;
-import com.olshevchenko.webshop.service.SecurityService;
+import com.olshevchenko.webshop.service.security.entity.Session;
+import com.olshevchenko.webshop.service.security.SecurityService;
+import com.olshevchenko.webshop.utils.PropertiesReader;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
@@ -22,9 +23,9 @@ public class SecurityFilter implements Filter {
     private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
     private final List<String> allowedPaths;
 
-    //TODO Question: If I transfer allowedPaths from properties through constructor, I get java.lang.NoSuchMethodException
     public SecurityFilter() {
-        this.allowedPaths = List.of("/login", "/login/", "/logout", "/logout/", "/register", "/register/");
+        PropertiesReader propertiesReader = ServiceLocator.get(PropertiesReader.class);
+        this.allowedPaths = propertiesReader.getAllowedUriPaths();
     }
 
     @Override
@@ -44,14 +45,11 @@ public class SecurityFilter implements Filter {
             }
         }
 
-        Session session = null;
         String userToken = getUserToken(httpServletRequest);
-        if (userToken != null) {
-            session = securityService.getSessions().get(userToken);
-        }
+        Optional<Session> optionalSession = securityService.getSession(userToken);
 
-        if (isAuth(session)) {
-            httpServletRequest.setAttribute("session", session);
+        if (optionalSession.isPresent()) {
+            httpServletRequest.setAttribute("session", optionalSession.get());
             log.info("Authorized!");
             chain.doFilter(request, response);
         } else if (requestURI.equals("/products") || requestURI.equals("/products/")) {
@@ -59,17 +57,6 @@ public class SecurityFilter implements Filter {
         } else {
             httpServletResponse.sendRedirect("/login");
         }
-
-    }
-
-    private boolean isAuth(Session session) {
-        if (session == null) {
-            return false;
-        }
-        boolean isAdmin = session.getUser().getRole().equals(Role.ADMIN);
-        boolean isUser = session.getUser().getRole().equals(Role.USER);
-        boolean isTokenValid = securityService.isTokenValid(session.getToken());
-        return (isAdmin || isUser) && isTokenValid;
     }
 
     private String getUserToken(HttpServletRequest request) {

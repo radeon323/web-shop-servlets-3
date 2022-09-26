@@ -1,5 +1,7 @@
-package com.olshevchenko.webshop.entity;
+package com.olshevchenko.webshop.service.security.entity;
 
+import com.olshevchenko.webshop.entity.CartItem;
+import com.olshevchenko.webshop.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

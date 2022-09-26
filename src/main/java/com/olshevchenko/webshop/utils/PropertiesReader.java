@@ -1,27 +1,32 @@
-package com.olshevchenko.webshop.web.utils;
+package com.olshevchenko.webshop.utils;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Oleksandr Shevchenko
  */
 @Slf4j
+@RequiredArgsConstructor
 public class PropertiesReader {
     private final Map<String, Properties> cachedProperties = new ConcurrentHashMap<>();
+    private final String path;
 
-    public Properties getProperties(String path)  {
+    public Properties getProperties()  {
         if (!cachedProperties.containsKey(path)) {
             cachedProperties.put(path, readProperties(path));
         }
         return new Properties(cachedProperties.get(path));
+    }
+
+    public List<String> getAllowedUriPaths() {
+        return Arrays.asList(getProperties().getProperty("security.filter.url.exclude").split(","));
     }
 
     private Properties readProperties(String path)  {

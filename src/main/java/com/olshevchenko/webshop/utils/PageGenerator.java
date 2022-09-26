@@ -1,4 +1,4 @@
-package com.olshevchenko.webshop.web.utils;
+package com.olshevchenko.webshop.utils;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
