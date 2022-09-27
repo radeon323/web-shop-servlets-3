@@ -4,7 +4,7 @@ import com.olshevchenko.webshop.ServiceLocator;
 import com.olshevchenko.webshop.utils.PageGenerator;
 import lombok.SneakyThrows;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**

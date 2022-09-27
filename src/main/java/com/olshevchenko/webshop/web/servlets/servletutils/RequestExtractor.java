@@ -2,7 +2,7 @@ package com.olshevchenko.webshop.web.servlets.servletutils;
 
 import com.olshevchenko.webshop.exception.FieldsNotFilledException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Oleksandr Shevchenko

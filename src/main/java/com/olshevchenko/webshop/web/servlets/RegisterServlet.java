@@ -12,9 +12,9 @@ import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.web.servlets.servletutils.StringParser;
 import com.olshevchenko.webshop.utils.PageGenerator;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;

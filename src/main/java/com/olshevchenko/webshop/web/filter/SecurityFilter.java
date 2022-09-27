@@ -6,10 +6,10 @@ import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.utils.PropertiesReader;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.*;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +26,6 @@ public class SecurityFilter implements Filter {
     public SecurityFilter() {
         PropertiesReader propertiesReader = ServiceLocator.get(PropertiesReader.class);
         this.allowedPaths = propertiesReader.getAllowedUriPaths();
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
     }
 
     @Override
@@ -71,7 +67,4 @@ public class SecurityFilter implements Filter {
     }
 
 
-    @Override
-    public void destroy() {
-    }
 }

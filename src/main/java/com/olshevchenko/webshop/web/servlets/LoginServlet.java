@@ -8,7 +8,10 @@ import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.web.servlets.servletutils.ResponseWriter;
 import com.olshevchenko.webshop.utils.PageGenerator;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
