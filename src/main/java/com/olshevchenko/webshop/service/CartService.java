@@ -2,16 +2,20 @@ package com.olshevchenko.webshop.service;
 
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Product;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 /**
  * @author Oleksandr Shevchenko
  */
+@Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
 public class CartService {
-    private final ProductService productService;
+    private ProductService productService;
 
     public void addToCart(List<CartItem> cart, int id) {
         Product product = productService.findById(id);

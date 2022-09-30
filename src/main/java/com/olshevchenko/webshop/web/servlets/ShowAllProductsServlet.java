@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.security.entity.Session;
@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class ShowAllProductsServlet extends HttpServlet {
     private static final String pageFileName = "products_list.html";
-    private final ProductService productService = ServiceLocator.get(ProductService.class);
-    private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
-    private final CartService cartService = ServiceLocator.get(CartService.class);
+    private final ProductService productService = Context.getContext().getBean(ProductService.class);
+    private final PageGenerator pageGenerator = Context.getContext().getBean(PageGenerator.class);
+    private final CartService cartService = Context.getContext().getBean(CartService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

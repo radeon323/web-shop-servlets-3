@@ -5,7 +5,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -18,9 +18,13 @@ import java.util.Map;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@RequiredArgsConstructor
+@Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageGenerator {
-    private final String HTML_DIR;
+    private String path;
 
     public String getPage(String fileName, Map<String, Object> data) {
         try {
@@ -40,7 +44,7 @@ public class PageGenerator {
 
     private Configuration initConfiguration() {
         Configuration config = new Configuration(Configuration.VERSION_2_3_31);
-        final ClassTemplateLoader loader = new ClassTemplateLoader(PageGenerator.class, HTML_DIR);
+        final ClassTemplateLoader loader = new ClassTemplateLoader(PageGenerator.class, path);
         config.setTemplateLoader(loader);
         config.setDefaultEncoding("UTF-8");
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);

@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.ProductService;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DeleteProductServlet extends HttpServlet {
     private static final String pageFileName = "products_list.html";
-    private final ProductService productService = ServiceLocator.get(ProductService.class);
+    private final ProductService productService = Context.getContext().getBean(ProductService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

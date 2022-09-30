@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets.servletutils;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.utils.PageGenerator;
 import lombok.SneakyThrows;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * @author Oleksandr Shevchenko
  */
 public class ResponseWriter {
-    private static final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
+    private static final PageGenerator pageGenerator = Context.getContext().getBean(PageGenerator.class);
 
     public static void writeFieldsErrorResponse(HttpServletResponse response, String filename, Map<String, Object> parameters) {
         String errorMsg = "Please fill up all necessary fields!";

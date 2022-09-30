@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.service.security.SecurityService;
 
 import jakarta.servlet.http.Cookie;
@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Oleksandr Shevchenko
  */
 public class LogoutServlet extends HttpServlet {
-    private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
+    private final SecurityService securityService = Context.getContext().getBean(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

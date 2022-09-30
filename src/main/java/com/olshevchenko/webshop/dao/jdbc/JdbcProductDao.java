@@ -2,7 +2,8 @@ package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.dao.ProductDao;
 import com.olshevchenko.webshop.entity.Product;
-import lombok.RequiredArgsConstructor;
+import com.olshevchenko.webshop.utils.DataSourceFactory;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -15,20 +16,22 @@ import java.util.List;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@RequiredArgsConstructor
+@Setter
+@ToString
+@EqualsAndHashCode
 public class JdbcProductDao implements ProductDao {
 
-    private final DataSource dataSource;
     private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
     private static final String FIND_ALL_SQL = "SELECT id, name, description, price, creation_date FROM products";
     private static final String FIND_BY_ID_SQL = "SELECT id, name, description, price, creation_date FROM products WHERE id = ?";
     private static final String ADD_SQL = "INSERT INTO products (name, description, price, creation_date) VALUES (?, ?, ?, ?)";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM products WHERE id = ?";
     private static final String UPDATE_BY_ID_SQL = "UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?";
-
+    private DataSourceFactory dataSourceFactory;
 
     @Override
     public List<Product> findAll() {
+        DataSource dataSource = dataSourceFactory.createDataSource();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -47,6 +50,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public Product findById(int id) {
+        DataSource dataSource = dataSourceFactory.createDataSource();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
@@ -64,6 +68,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void add(Product product) {
+        DataSource dataSource = dataSourceFactory.createDataSource();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
             preparedStatement.setString(1, product.getName());
@@ -79,6 +84,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void remove(int id) {
+        DataSource dataSource = dataSourceFactory.createDataSource();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
@@ -92,6 +98,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void update(Product product) {
+        DataSource dataSource = dataSourceFactory.createDataSource();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
             preparedStatement.setString(1, product.getName());

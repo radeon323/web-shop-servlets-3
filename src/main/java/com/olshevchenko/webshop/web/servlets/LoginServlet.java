@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
@@ -22,8 +22,8 @@ import java.util.Collections;
  */
 public class LoginServlet extends HttpServlet {
     private static final String pageFileName = "login.html";
-    private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
-    private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
+    private final SecurityService securityService = Context.getContext().getBean(SecurityService.class);
+    private final PageGenerator pageGenerator = Context.getContext().getBean(PageGenerator.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

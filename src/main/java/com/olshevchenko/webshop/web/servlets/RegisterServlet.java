@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
@@ -25,9 +25,9 @@ import java.util.function.Predicate;
  */
 public class RegisterServlet extends HttpServlet {
     private static final String pageFileName = "register.html";
-    private final UserService userService = ServiceLocator.get(UserService.class);
-    private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
-    private final PageGenerator pageGenerator = ServiceLocator.get(PageGenerator.class);
+    private final UserService userService = Context.getContext().getBean(UserService.class);
+    private final SecurityService securityService = Context.getContext().getBean(SecurityService.class);
+    private final PageGenerator pageGenerator = Context.getContext().getBean(PageGenerator.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

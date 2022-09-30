@@ -1,0 +1,38 @@
+<beans>
+
+    <bean id="pageGenerator" class="com.olshevchenko.webshop.utils.PageGenerator">
+        <property name="path" value="/templates"/>
+    </bean>
+
+    <bean id="dataSourceFactory" class="com.olshevchenko.webshop.utils.DataSourceFactory">
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/webshop"/>
+        <property name="jdbcUser" value="postgres"/>
+        <property name="jdbcPassword" value="postgres"/>
+    </bean>
+
+    <bean id="productDao" class="com.olshevchenko.webshop.dao.jdbc.JdbcProductDao">
+        <property name="dataSourceFactory" ref="dataSourceFactory"/>
+    </bean>
+
+    <bean id="userDao" class="com.olshevchenko.webshop.dao.jdbc.JdbcUserDao">
+        <property name="dataSourceFactory" ref="dataSourceFactory"/>
+    </bean>
+
+    <bean id="productService" class="com.olshevchenko.webshop.service.ProductService">
+        <property name="productDao" ref="productDao"/>
+    </bean>
+
+    <bean id="userService" class="com.olshevchenko.webshop.service.UserService">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
+    <bean id="securityService" class="com.olshevchenko.webshop.service.security.SecurityService">
+        <property name="userService" ref="userService"/>
+        <property name="cookieTtlMinutes" value="10"/>
+    </bean>
+
+    <bean id="cartService" class="com.olshevchenko.webshop.service.CartService">
+        <property name="productService" ref="productService"/>
+    </bean>
+
+</beans>

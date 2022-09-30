@@ -1,9 +1,11 @@
 package com.olshevchenko.webshop.web.filter;
 
-import com.olshevchenko.webshop.ServiceLocator;
+import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
-import com.olshevchenko.webshop.utils.PropertiesReader;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.*;
@@ -19,13 +21,15 @@ import java.util.Optional;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
+@Setter
+@ToString
+@EqualsAndHashCode
 public class SecurityFilter implements Filter {
-    private final SecurityService securityService = ServiceLocator.get(SecurityService.class);
+    private final SecurityService securityService = Context.getContext().getBean(SecurityService.class);
     private final List<String> allowedPaths;
 
     public SecurityFilter() {
-        PropertiesReader propertiesReader = ServiceLocator.get(PropertiesReader.class);
-        this.allowedPaths = propertiesReader.getAllowedUriPaths();
+        this.allowedPaths = Arrays.asList(("/login,/login/,/logout,/logout/,/register,/register/").split(","));
     }
 
     @Override

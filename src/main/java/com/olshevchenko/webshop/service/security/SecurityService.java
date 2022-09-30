@@ -6,7 +6,7 @@ import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import com.olshevchenko.webshop.service.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -19,12 +19,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
+@Setter
+@ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class SecurityService {
     private final Map<String, Session> sessions = new ConcurrentHashMap<>();
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
-    private final UserService userService;
-    private final int cookieTtlMinutes;
+    private UserService userService;
+    private int cookieTtlMinutes;
 
     public Session login(String email, String password) {
         User user = getUser(email);
