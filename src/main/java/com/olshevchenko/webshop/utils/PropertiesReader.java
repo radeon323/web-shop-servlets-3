@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class PropertiesReader {
     private final Map<String, Properties> cachedProperties = new ConcurrentHashMap<>();
     private String path;

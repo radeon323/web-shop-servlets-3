@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.filter;
 
-import com.olshevchenko.webshop.context.Context;
+import com.olshevchenko.webshop.context.InitContext;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.utils.PropertiesReader;
@@ -26,11 +26,11 @@ import java.util.Optional;
 @ToString
 @EqualsAndHashCode
 public class SecurityFilter implements Filter {
-    private final SecurityService securityService = Context.getContext().getBean(SecurityService.class);
+    private final SecurityService securityService = InitContext.getContext().getBean(SecurityService.class);
     private final List<String> allowedPaths;
 
     public SecurityFilter() {
-        PropertiesReader propertiesReader = Context.getContext().getBean(PropertiesReader.class);
+        PropertiesReader propertiesReader = InitContext.getContext().getBean(PropertiesReader.class);
         this.allowedPaths = propertiesReader.getAllowedUriPaths();
     }
 

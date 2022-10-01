@@ -1,6 +1,6 @@
 package com.olshevchenko.webshop.web.servlets;
 
-import com.olshevchenko.webshop.context.Context;
+import com.olshevchenko.webshop.context.InitContext;
 import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.ProductService;
@@ -22,8 +22,8 @@ import java.util.Optional;
 public class AddProductServlet extends HttpServlet {
     private static final Map<String, Object> parameters = new HashMap<>();
     private static final String pageFileName = "add_product.html";
-    private final ProductService productService = Context.getContext().getBean(ProductService.class);
-    private final PageGenerator pageGenerator = Context.getContext().getBean(PageGenerator.class);
+    private final ProductService productService = InitContext.getContext().getBean(ProductService.class);
+    private final PageGenerator pageGenerator = InitContext.getContext().getBean(PageGenerator.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
