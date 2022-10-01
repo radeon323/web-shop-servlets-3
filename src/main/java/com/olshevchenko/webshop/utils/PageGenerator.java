@@ -22,9 +22,8 @@ import java.util.Map;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 public class PageGenerator {
-    private String path;
+    private PropertiesReader propertiesReader;
 
     public String getPage(String fileName, Map<String, Object> data) {
         try {
@@ -44,7 +43,7 @@ public class PageGenerator {
 
     private Configuration initConfiguration() {
         Configuration config = new Configuration(Configuration.VERSION_2_3_31);
-        final ClassTemplateLoader loader = new ClassTemplateLoader(PageGenerator.class, path);
+        final ClassTemplateLoader loader = new ClassTemplateLoader(PageGenerator.class, propertiesReader.getProperties().getProperty("html.directory"));
         config.setTemplateLoader(loader);
         config.setDefaultEncoding("UTF-8");
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);

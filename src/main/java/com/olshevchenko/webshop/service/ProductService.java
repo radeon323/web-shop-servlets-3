@@ -13,7 +13,6 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-@RequiredArgsConstructor
 public class ProductService {
     private ProductDao productDao;
 

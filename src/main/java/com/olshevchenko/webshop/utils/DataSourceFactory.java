@@ -15,15 +15,13 @@ import javax.sql.DataSource;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class DataSourceFactory {
-    private String jdbcUrl;
-    private String jdbcUser;
-    private String jdbcPassword;
+    private PropertiesReader propertiesReader;
 
     public DataSource createDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(jdbcUrl);
-        dataSource.setUsername(jdbcUser);
-        dataSource.setPassword(jdbcPassword);
+        dataSource.setUrl(propertiesReader.getProperties().getProperty("jdbc.url"));
+        dataSource.setUsername(propertiesReader.getProperties().getProperty("jdbc.user"));
+        dataSource.setPassword(propertiesReader.getProperties().getProperty("jdbc.password"));
         return dataSource;
     }
 }

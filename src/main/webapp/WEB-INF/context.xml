@@ -1,13 +1,15 @@
 <beans>
 
+    <bean id="propertiesReader" class="com.olshevchenko.webshop.utils.PropertiesReader">
+        <property name="path" value="application.properties"/>
+    </bean>
+
     <bean id="pageGenerator" class="com.olshevchenko.webshop.utils.PageGenerator">
-        <property name="path" value="/templates"/>
+        <property name="propertiesReader" ref="propertiesReader"/>
     </bean>
 
     <bean id="dataSourceFactory" class="com.olshevchenko.webshop.utils.DataSourceFactory">
-        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/webshop"/>
-        <property name="jdbcUser" value="postgres"/>
-        <property name="jdbcPassword" value="postgres"/>
+        <property name="propertiesReader" ref="propertiesReader"/>
     </bean>
 
     <bean id="productDao" class="com.olshevchenko.webshop.dao.jdbc.JdbcProductDao">
@@ -27,8 +29,8 @@
     </bean>
 
     <bean id="securityService" class="com.olshevchenko.webshop.service.security.SecurityService">
+        <property name="propertiesReader" ref="propertiesReader"/>
         <property name="userService" ref="userService"/>
-        <property name="cookieTtlMinutes" value="10"/>
     </bean>
 
     <bean id="cartService" class="com.olshevchenko.webshop.service.CartService">

@@ -3,6 +3,7 @@ package com.olshevchenko.webshop.web.filter;
 import com.olshevchenko.webshop.context.Context;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
+import com.olshevchenko.webshop.utils.PropertiesReader;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +30,8 @@ public class SecurityFilter implements Filter {
     private final List<String> allowedPaths;
 
     public SecurityFilter() {
-        this.allowedPaths = Arrays.asList(("/login,/login/,/logout,/logout/,/register,/register/").split(","));
+        PropertiesReader propertiesReader = Context.getContext().getBean(PropertiesReader.class);
+        this.allowedPaths = propertiesReader.getAllowedUriPaths();
     }
 
     @Override

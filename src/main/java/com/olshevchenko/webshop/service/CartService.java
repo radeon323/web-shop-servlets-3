@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 public class CartService {
     private ProductService productService;
 
