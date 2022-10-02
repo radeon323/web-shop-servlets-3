@@ -17,7 +17,11 @@ public class InitContext {
     static {
         PropertiesReader propertiesReader = new PropertiesReader("application.properties");
         String path = propertiesReader.getProperties().getProperty("context.path");
+        log.info("Starting context container...");
         context = new ClassPathApplicationContext(path);
+        for (String beanName : context.getBeanNames()) {
+            log.info("Creating bean '{}'", beanName);
+        }
     }
 
     public static ApplicationContext getContext() {
