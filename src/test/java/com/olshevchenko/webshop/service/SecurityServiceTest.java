@@ -35,7 +35,7 @@ class SecurityServiceTest {
     private UserService userService;
 
     @InjectMocks
-    private SecurityService securityService = new SecurityService(userService, cookieTtlMinutes);
+    private SecurityService securityService = new SecurityService();
 
     @BeforeEach
     void init() {

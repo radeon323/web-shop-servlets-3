@@ -13,6 +13,8 @@ import java.util.Optional;
 @Setter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserService {
     private UserDao userDao;
 
