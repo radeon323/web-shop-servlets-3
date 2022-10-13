@@ -5,7 +5,6 @@ import com.olshevchenko.webshop.service.security.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -22,7 +21,6 @@ import java.util.Optional;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@PropertySource("classpath:/application.properties")
 public class SecurityFilter implements Filter {
     private SecurityService securityService;
     private List<String> allowedPaths;

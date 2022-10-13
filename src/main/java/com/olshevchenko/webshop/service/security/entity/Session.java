@@ -2,10 +2,7 @@ package com.olshevchenko.webshop.service.security.entity;
 
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 public class Session {
     private String token;
     private LocalDateTime expireDateTime;

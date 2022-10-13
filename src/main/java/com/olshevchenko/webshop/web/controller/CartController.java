@@ -25,20 +25,13 @@ public class CartController {
     private final ProductService productService;
 
     @GetMapping("/cart")
-    String getCart(HttpServletRequest request, ModelMap model) {
-        Session session = (Session) request.getAttribute("session");
-        model.addAttribute("session", session);
-
-        List<CartItem> cartItems = session.getCart();
-        model.addAttribute("cartItems", cartItems);
-
-        double totalPrice = cartService.calculateTotalPrice(cartItems);
-        model.addAttribute("totalPrice", totalPrice);
+    protected String getCart(HttpServletRequest request, ModelMap model) {
+        createCartAndAddSessionAndReturnListOfCartItems(request, model);
         return "cart";
     }
 
     @PostMapping("/products")
-    String addProductToCart(@RequestParam int id, HttpServletRequest request, ModelMap model) {
+    protected String addProductToCart(@RequestParam int id, HttpServletRequest request, ModelMap model) {
         List<Product> products = productService.findAll();
         model.addAttribute("products", products);
 
@@ -52,26 +45,34 @@ public class CartController {
     }
 
     @GetMapping("/cart/delete")
-    String removeProductFromCart(@RequestParam int id, HttpServletRequest request) {
-        Session session = (Session) request.getAttribute("session");
-
-        List<CartItem> cartItems = session.getCart();
+    protected String removeProductFromCart(@RequestParam int id, HttpServletRequest request, ModelMap model) {
+        List<CartItem> cartItems = createCartAndAddSessionAndReturnListOfCartItems(request, model);
         cartService.removeFromCart(cartItems, id);
-
+        createCartAndAddSessionAndReturnListOfCartItems(request, model);
         return "cart";
     }
 
     @PostMapping("/cart/update")
-    String updateCart(@RequestParam int id, HttpServletRequest request) {
-        Session session = (Session) request.getAttribute("session");
-
-        List<CartItem> cartItems = session.getCart();
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-
+    protected String updateCart(@RequestParam int id, @RequestParam(defaultValue = "0") int quantity, HttpServletRequest request, ModelMap model) {
+        List<CartItem> cartItems = createCartAndAddSessionAndReturnListOfCartItems(request, model);
+        if (quantity == 0) {
+            String errorMsg = "Please specify quantity!";
+            model.addAttribute("errorMsg", errorMsg);
+            return "cart";
+        }
         cartService.updateQuantity(cartItems,id,quantity);
-        session.setCart(cartItems);
-
+        createCartAndAddSessionAndReturnListOfCartItems(request, model);
         return "cart";
+    }
+
+    List<CartItem> createCartAndAddSessionAndReturnListOfCartItems(HttpServletRequest request, ModelMap model) {
+        Session session = (Session) request.getAttribute("session");
+        model.addAttribute("session", session);
+        List<CartItem> cartItems = session.getCart();
+        model.addAttribute("cartItems", cartItems);
+        double totalPrice = cartService.calculateTotalPrice(cartItems);
+        model.addAttribute("totalPrice", totalPrice);
+        return cartItems;
     }
 
 

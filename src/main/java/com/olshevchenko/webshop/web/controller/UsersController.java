@@ -41,12 +41,12 @@ public class UsersController {
     private String cookieTtlMinutes;
 
     @GetMapping("/login")
-    String getLoginPage() {
+    protected String getLoginPage() {
         return "login";
     }
 
     @PostMapping("/login")
-    String login(@RequestParam String email,
+    protected String login(@RequestParam String email,
                 @RequestParam String password,
                 HttpServletResponse response,
                 ModelMap model) {
@@ -68,7 +68,7 @@ public class UsersController {
     }
 
     @GetMapping("/logout")
-    String logout(HttpServletRequest request) {
+    protected String logout(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("user-token")) {
@@ -79,12 +79,12 @@ public class UsersController {
     }
 
     @GetMapping("/register")
-    String getRegisterPage() {
+    protected String getRegisterPage() {
         return "register";
     }
 
     @PostMapping("/register")
-    String register(@RequestParam String email, @RequestParam String password,
+    protected String register(@RequestParam String email, @RequestParam String password,
                               @RequestParam(defaultValue = "MALE") String gender,
                               @RequestParam(defaultValue = "") String firstName,
                               @RequestParam(defaultValue = "") String lastName,
@@ -124,14 +124,14 @@ public class UsersController {
     }
 
     @GetMapping("/users/edit")
-    String getEditUserPage(HttpServletRequest request, ModelMap model) {
+    protected String getEditUserPage(HttpServletRequest request, ModelMap model) {
         Session session = (Session) request.getAttribute("session");
         model.addAttribute("session", session);
         return "edit_user";
     }
 
     @PostMapping("/users/edit")
-    String editUser(@RequestParam String email, @RequestParam String password,
+    protected String editUser(@RequestParam String email, @RequestParam String password,
                     @RequestParam(defaultValue = "") String firstName,
                     @RequestParam(defaultValue = "") String lastName,
                     @RequestParam(defaultValue = "") String about,

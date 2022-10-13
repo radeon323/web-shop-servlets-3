@@ -28,13 +28,13 @@ public class ProductsController {
     private final ProductService productService;
 
     @GetMapping()
-    String showAllProducts(HttpServletRequest request, ModelMap model) {
+    protected String showAllProducts(HttpServletRequest request, ModelMap model) {
         createProductsListAndAddSession(request, model);
         return "products_list";
     }
 
     @GetMapping("/add")
-    String getAddProductPage(HttpServletRequest request, ModelMap model) {
+    protected String getAddProductPage(HttpServletRequest request, ModelMap model) {
         model.remove("msgSuccess");
         Session session = (Session) request.getAttribute("session");
         model.addAttribute("session", session);
@@ -42,7 +42,7 @@ public class ProductsController {
     }
 
     @PostMapping("/add")
-    String addProduct(@RequestParam(defaultValue = "0") int id,
+    protected String addProduct(@RequestParam(defaultValue = "0") int id,
                       @RequestParam String name,
                       @RequestParam(defaultValue = "0") double price,
                       @RequestParam(defaultValue = "") String description,
@@ -61,7 +61,7 @@ public class ProductsController {
     }
 
     @GetMapping("/edit")
-    String getEditProductPage(HttpServletRequest request,
+    protected String getEditProductPage(HttpServletRequest request,
                               @RequestParam int id,
                               ModelMap model) {
         Product product = productService.findById(id);
@@ -73,7 +73,7 @@ public class ProductsController {
     }
 
     @PostMapping("/edit")
-    String editProduct(@RequestParam int id,
+    protected String editProduct(@RequestParam int id,
                        @RequestParam String name,
                        @RequestParam(defaultValue = "0") double price,
                        @RequestParam(defaultValue = "") String description,
@@ -92,7 +92,7 @@ public class ProductsController {
     }
 
     @GetMapping("/delete")
-    String deleteProduct(@RequestParam int id,
+    protected String deleteProduct(@RequestParam int id,
                          HttpServletRequest request,
                          ModelMap model) {
         productService.remove(id);
