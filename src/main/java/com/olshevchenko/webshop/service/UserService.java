@@ -2,21 +2,18 @@ package com.olshevchenko.webshop.service;
 
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
-import com.olshevchenko.webshop.exception.UserNotFoundException;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
  */
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public Optional<User> findById(int id) {
         return userDao.findById(id);

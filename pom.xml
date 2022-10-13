@@ -17,6 +17,8 @@
         <flyway.user>postgres</flyway.user>
         <flyway.password>postgres</flyway.password>
         <flyway.url>jdbc:postgresql://localhost:5432/webshop</flyway.url>
+
+        <spring.version>5.3.23</spring.version>
     </properties>
 
     <build>
@@ -25,7 +27,7 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>11.0.12</version>
+                <version>9.4.44.v20210927</version>
             </plugin>
 
             <plugin>
@@ -58,12 +60,28 @@
 
     <dependencies>
 
+        <!--SPRING MVC-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!--WEB-->
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
-            <scope>provided</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
         </dependency>
 
         <!--TEMPLATE-->
@@ -111,13 +129,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.olshevchenko</groupId>
-            <artifactId>ioc</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>2.0.3</version>
         </dependency>
 
     </dependencies>

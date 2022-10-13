@@ -1,18 +1,18 @@
 package com.olshevchenko.webshop.web.filter;
 
-import com.olshevchenko.webshop.context.InitContext;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
-import com.olshevchenko.webshop.utils.PropertiesReader;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.ApplicationContextException;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -22,16 +22,22 @@ import java.util.Optional;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Setter
-@ToString
-@EqualsAndHashCode
+@PropertySource("classpath:/application.properties")
 public class SecurityFilter implements Filter {
-    private final SecurityService securityService = InitContext.getContext().getBean(SecurityService.class);
-    private final List<String> allowedPaths;
+    private SecurityService securityService;
+    private List<String> allowedPaths;
 
-    public SecurityFilter() {
-        PropertiesReader propertiesReader = InitContext.getContext().getBean(PropertiesReader.class);
-        this.allowedPaths = propertiesReader.getAllowedUriPaths();
+    @Override
+    @SuppressWarnings("unchecked")
+    public void init(FilterConfig filterConfig) {
+        ServletContext servletContext = filterConfig.getServletContext();
+        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        if (webApplicationContext != null) {
+            securityService = webApplicationContext.getBean(SecurityService.class);
+            allowedPaths = (List<String>) webApplicationContext.getBean("allowedPaths");
+        } else {
+            throw new ApplicationContextException("Could`t get an application context");
+        }
     }
 
     @Override
@@ -48,13 +54,15 @@ public class SecurityFilter implements Filter {
         }
 
         String userToken = getUserToken(httpServletRequest);
-        Optional<Session> optionalSession = securityService.getSession(userToken);
 
+        Optional<Session> optionalSession = securityService.getSession(userToken);
         if (optionalSession.isPresent()) {
-            httpServletRequest.setAttribute("session", optionalSession.get());
-            log.info("Authorized!");
+            Session session = optionalSession.get();
+            httpServletRequest.setAttribute("session", session);
+            log.info("Authorized as user: {}", session.getUser().getEmail());
             chain.doFilter(request, response);
         } else if (requestURI.equals("/products") || requestURI.equals("/products/")) {
+            log.info("Unauthorized...");
             chain.doFilter(request, response);
         } else {
             httpServletResponse.sendRedirect("/login");
@@ -72,5 +80,7 @@ public class SecurityFilter implements Filter {
         return null;
     }
 
-
+    @Override
+    public void destroy() {
+    }
 }

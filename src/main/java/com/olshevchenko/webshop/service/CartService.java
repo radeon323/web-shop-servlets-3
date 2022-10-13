@@ -3,19 +3,17 @@ package com.olshevchenko.webshop.service;
 import com.olshevchenko.webshop.entity.CartItem;
 import com.olshevchenko.webshop.entity.Product;
 import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author Oleksandr Shevchenko
  */
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class CartService {
-    private ProductService productService;
+    private final ProductService productService;
 
     public void addToCart(List<CartItem> cart, int id) {
         Product product = productService.findById(id);

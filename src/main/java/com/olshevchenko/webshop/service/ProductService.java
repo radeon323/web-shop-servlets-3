@@ -3,6 +3,7 @@ package com.olshevchenko.webshop.service;
 import com.olshevchenko.webshop.dao.ProductDao;
 import com.olshevchenko.webshop.entity.Product;
 import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,13 +11,10 @@ import java.util.List;
 /**
  * @author Oleksandr Shevchenko
  */
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class ProductService {
-    private ProductDao productDao;
+    private final ProductDao productDao;
 
     public List<Product> findAll() {
         return productDao.findAll();

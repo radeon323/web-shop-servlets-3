@@ -6,9 +6,11 @@ import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import com.olshevchenko.webshop.service.UserService;
-import com.olshevchenko.webshop.utils.PropertiesReader;
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -20,20 +22,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Setter
-@ToString
-@EqualsAndHashCode
+@Service
+@PropertySource("classpath:/application.properties")
 public class SecurityService {
-    private final Map<String, Session> sessions = new ConcurrentHashMap<>();
+    private static final Map<String, Session> sessions = new ConcurrentHashMap<>();
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
-    private PropertiesReader propertiesReader;
+
+    @Autowired
     private UserService userService;
+
+    @Value("${cookie.ttl.minutes}")
+    private String cookieTtlMinutes;
 
     public Session login(String email, String password) {
         User user = getUser(email);
         checkPassword(user, password);
         String token = String.valueOf(UUID.randomUUID());
-        Session session = new Session(token, LocalDateTime.now().plusMinutes(Long.parseLong(propertiesReader.getProperties().getProperty("cookie.ttl.minutes"))), user);
+        Session session = new Session(token, LocalDateTime.now().plusMinutes(Long.parseLong(cookieTtlMinutes)), user);
         sessions.put(token, session);
         return session;
     }
