@@ -13,10 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * @author Oleksandr Shevchenko
@@ -25,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @PropertySource("classpath:/application.properties")
 public class SecurityService {
-    private static final Map<String, Session> sessions = new ConcurrentHashMap<>();
+    private static final List<Session> sessions = Collections.synchronizedList(new ArrayList<>());
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Autowired
@@ -39,12 +36,12 @@ public class SecurityService {
         checkPassword(user, password);
         String token = String.valueOf(UUID.randomUUID());
         Session session = new Session(token, LocalDateTime.now().plusMinutes(Long.parseLong(cookieTtlMinutes)), user);
-        sessions.put(token, session);
+        sessions.add(session);
         return session;
     }
 
     public void logout(String userToken) {
-        sessions.remove(userToken);
+        sessions.removeIf(session -> Objects.equals(session.getToken(), userToken));
     }
 
     public String providePasswordHashAndSalt(String password) {
@@ -57,7 +54,9 @@ public class SecurityService {
         if (userToken == null || !isTokenValid(userToken)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(sessions.get(userToken));
+        return sessions.stream()
+                .filter(session -> Objects.equals(session.getToken(), userToken))
+                .findFirst();
     }
 
     private void checkPassword(User user, String password) {
@@ -73,8 +72,11 @@ public class SecurityService {
     }
 
     private boolean isTokenValid(String userToken) {
-        if (sessions.containsKey(userToken)) {
-            Session session = sessions.get(userToken);
+        Optional<Session> optionalSession = sessions.stream()
+                .filter(s -> Objects.equals(s.getToken(), userToken))
+                .findFirst();
+        if (optionalSession.isPresent()) {
+            Session session = optionalSession.get();
             boolean isAdmin = session.getUser().getRole().equals(Role.ADMIN);
             boolean isUser = session.getUser().getRole().equals(Role.USER);
             boolean isTokenValid = session.getExpireDateTime().isAfter(LocalDateTime.now());

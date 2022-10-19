@@ -31,15 +31,13 @@ public class JdbcProductDao implements ProductDao {
     @Override
     public List<Product> findAll() {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
             List<Product> products = Collections.synchronizedList(new ArrayList<>());
             while(resultSet.next()) {
                 products.add(PRODUCT_ROW_MAPPER.mapRow(resultSet));
             }
             return products;
-
         } catch (SQLException e) {
             log.error("Cannot execute query: {} ", FIND_ALL_SQL, e);
             throw new RuntimeException(e);
@@ -49,7 +47,7 @@ public class JdbcProductDao implements ProductDao {
     @Override
     public Product findById(int id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -66,7 +64,7 @@ public class JdbcProductDao implements ProductDao {
     @Override
     public void add(Product product) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
@@ -81,20 +79,19 @@ public class JdbcProductDao implements ProductDao {
     @Override
     public void remove(int id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             log.error("Cannot execute query: {} ", DELETE_BY_ID_SQL, e);
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public void update(Product product) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());

@@ -84,7 +84,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void remove(int id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
+            PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void update(User user) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setObject(3, user.getGender().toString(), Types.OTHER);
