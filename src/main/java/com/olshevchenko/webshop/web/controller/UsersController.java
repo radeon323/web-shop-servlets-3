@@ -106,7 +106,7 @@ public class UsersController {
             Optional<User> optionalUser = Optional.ofNullable(User.builder().
                     email(email)
                     .password(securityService.providePasswordHashAndSalt(password))
-                    .gender(Gender.valueOf(gender))
+                    .gender(Gender.valueOf(gender.toUpperCase()))
                     .firstName(firstName)
                     .lastName(lastName)
                     .about(about)
