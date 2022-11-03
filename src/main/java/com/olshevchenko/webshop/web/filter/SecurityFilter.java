@@ -4,7 +4,6 @@ import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -30,12 +29,8 @@ public class SecurityFilter implements Filter {
     public void init(FilterConfig filterConfig) {
         ServletContext servletContext = filterConfig.getServletContext();
         WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        if (webApplicationContext != null) {
-            securityService = webApplicationContext.getBean(SecurityService.class);
-            allowedPaths = (List<String>) webApplicationContext.getBean("allowedPaths");
-        } else {
-            throw new ApplicationContextException("Could`t get an application context");
-        }
+        securityService = webApplicationContext.getBean(SecurityService.class);
+        allowedPaths = Arrays.asList(securityService.getExcludeUrls().split(","));
     }
 
     @Override
@@ -81,4 +76,6 @@ public class SecurityFilter implements Filter {
     @Override
     public void destroy() {
     }
+
+
 }

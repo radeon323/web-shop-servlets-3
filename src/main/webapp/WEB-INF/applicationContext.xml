@@ -1,10 +1,44 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.w3.org/2001/XMLSchema"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
-    <context:component-scan base-package="com.olshevchenko"/>
+
+    <context:property-placeholder location="classpath:application.properties" />
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <bean id="jdbcProductDao" class="com.olshevchenko.webshop.dao.jdbc.JdbcProductDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="jdbcUserDao" class="com.olshevchenko.webshop.dao.jdbc.JdbcUserDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="productService" class="com.olshevchenko.webshop.service.ProductService">
+        <property name="productDao" ref="jdbcProductDao"/>
+    </bean>
+
+    <bean id="userService" class="com.olshevchenko.webshop.service.UserService">
+        <property name="userDao" ref="jdbcUserDao"/>
+    </bean>
+
+    <bean id="cartService" class="com.olshevchenko.webshop.service.CartService">
+        <property name="productService" ref="productService"/>
+    </bean>
+
+    <bean id="securityService" class="com.olshevchenko.webshop.service.security.SecurityService">
+        <property name="userService" ref="userService"/>
+        <property name="cookieTtlMinutes" value="${cookie.ttl.minutes}" />
+        <property name="excludeUrls" value="${security.filter.url.exclude}" />
+    </bean>
+
 </beans>

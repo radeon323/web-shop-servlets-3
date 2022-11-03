@@ -3,7 +3,7 @@ package com.olshevchenko.webshop.web.controller;
 import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.service.security.entity.Session;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,11 +21,11 @@ import java.util.Optional;
  */
 @Slf4j
 @Controller
+@AllArgsConstructor
 @RequestMapping("/products")
-@RequiredArgsConstructor
 public class ProductsController {
 
-    private final ProductService productService;
+    private ProductService productService;
 
     @GetMapping()
     protected String showAllProducts(HttpServletRequest request, ModelMap model) {
@@ -129,12 +129,6 @@ public class ProductsController {
             return Optional.empty();
         }
     }
-
-
-
-
-
-
 
 
 }

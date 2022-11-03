@@ -40,7 +40,7 @@ class UserServiceTest {
                 .firstName("Darth")
                 .lastName("Vader")
                 .about("May the force be with you!")
-                .age(50)
+                .age(41)
                 .role(Role.USER)
                 .build();
     }

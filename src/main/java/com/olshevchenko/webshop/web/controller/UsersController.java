@@ -8,10 +8,8 @@ import com.olshevchenko.webshop.service.UserService;
 import com.olshevchenko.webshop.service.security.SecurityService;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.service.security.entity.Session;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +27,12 @@ import java.util.Optional;
  */
 @Slf4j
 @Controller
+@AllArgsConstructor
 @RequestMapping()
-@RequiredArgsConstructor
-@PropertySource("classpath:/application.properties")
 public class UsersController {
 
-    private final UserService userService;
-    private final SecurityService securityService;
-
-    @Value("${cookie.ttl.minutes}")
-    private String cookieTtlMinutes;
+    private UserService userService;
+    private SecurityService securityService;
 
     @GetMapping("/login")
     protected String getLoginPage() {
@@ -53,7 +47,8 @@ public class UsersController {
         try {
             Session session = securityService.login(email, password);
             Cookie cookie = new Cookie("user-token", session.getToken());
-            cookie.setMaxAge(Integer.parseInt(cookieTtlMinutes)*60);
+            //TODO how to set cookieTtlMinutes more smarter?
+            cookie.setMaxAge(securityService.getCookieTtlMinutes()*60);
             response.addCookie(cookie);
             return "redirect:/products";
         } catch (UserNotFoundException e) {

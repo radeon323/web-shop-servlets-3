@@ -6,11 +6,9 @@ import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import com.olshevchenko.webshop.service.UserService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -19,29 +17,32 @@ import java.util.*;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Service
-@PropertySource("classpath:/application.properties")
+@Setter
+@NoArgsConstructor
 public class SecurityService {
-    private static final List<Session> sessions = Collections.synchronizedList(new ArrayList<>());
+    private final List<Session> sessionList = Collections.synchronizedList(new ArrayList<>());
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
-    @Autowired
     private UserService userService;
+    private int cookieTtlMinutes;
+    private String excludeUrls;
 
-    @Value("${cookie.ttl.minutes}")
-    private String cookieTtlMinutes;
+    public SecurityService(UserService userService, int cookieTtlMinutes) {
+        this.userService = userService;
+        this.cookieTtlMinutes = cookieTtlMinutes;
+    }
 
     public Session login(String email, String password) {
         User user = getUser(email);
         checkPassword(user, password);
         String token = String.valueOf(UUID.randomUUID());
-        Session session = new Session(token, LocalDateTime.now().plusMinutes(Long.parseLong(cookieTtlMinutes)), user);
-        sessions.add(session);
+        Session session = new Session(token, LocalDateTime.now().plusMinutes(cookieTtlMinutes), user);
+        sessionList.add(session);
         return session;
     }
 
     public void logout(String userToken) {
-        sessions.removeIf(session -> Objects.equals(session.getToken(), userToken));
+        sessionList.removeIf(session -> Objects.equals(session.getToken(), userToken));
     }
 
     public String providePasswordHashAndSalt(String password) {
@@ -54,7 +55,7 @@ public class SecurityService {
         if (userToken == null || !isTokenValid(userToken)) {
             return Optional.empty();
         }
-        return sessions.stream()
+        return sessionList.stream()
                 .filter(session -> Objects.equals(session.getToken(), userToken))
                 .findFirst();
     }
@@ -72,18 +73,24 @@ public class SecurityService {
     }
 
     private boolean isTokenValid(String userToken) {
-        Optional<Session> optionalSession = sessions.stream()
+        Optional<Session> optionalSession = sessionList.stream()
                 .filter(s -> Objects.equals(s.getToken(), userToken))
                 .findFirst();
         if (optionalSession.isPresent()) {
             Session session = optionalSession.get();
-            boolean isAdmin = session.getUser().getRole().equals(Role.ADMIN);
-            boolean isUser = session.getUser().getRole().equals(Role.USER);
+            Role role = session.getUser().getRole();
             boolean isTokenValid = session.getExpireDateTime().isAfter(LocalDateTime.now());
-            return (isAdmin || isUser) && isTokenValid;
+            return (role == Role.ADMIN || role == Role.USER) && isTokenValid;
         }
         return false;
     }
 
+    public String getExcludeUrls() {
+        return excludeUrls;
+    }
 
+
+    public int getCookieTtlMinutes() {
+        return cookieTtlMinutes;
+    }
 }
