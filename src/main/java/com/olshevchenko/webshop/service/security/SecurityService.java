@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Oleksandr Shevchenko
@@ -20,7 +21,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class SecurityService {
-    private final List<Session> sessionList = Collections.synchronizedList(new ArrayList<>());
+    private final List<Session> sessionList = new CopyOnWriteArrayList<>();
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     private UserService userService;
@@ -78,9 +79,7 @@ public class SecurityService {
                 .findFirst();
         if (optionalSession.isPresent()) {
             Session session = optionalSession.get();
-            Role role = session.getUser().getRole();
-            boolean isTokenValid = session.getExpireDateTime().isAfter(LocalDateTime.now());
-            return (role == Role.ADMIN || role == Role.USER) && isTokenValid;
+            return session.getExpireDateTime().isAfter(LocalDateTime.now());
         }
         return false;
     }

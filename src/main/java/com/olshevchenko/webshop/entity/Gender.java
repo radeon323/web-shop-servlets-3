@@ -1,8 +1,14 @@
 package com.olshevchenko.webshop.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author Oleksandr Shevchenko
  */
+@Getter
+@AllArgsConstructor
 public enum Gender {
-    MALE, FEMALE
+    MALE("MALE"), FEMALE("FEMALE");
+    private final String name;
 }

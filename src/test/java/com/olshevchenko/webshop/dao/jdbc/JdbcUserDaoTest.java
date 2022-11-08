@@ -4,9 +4,10 @@ import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.flywaydb.core.Flyway;
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,20 +18,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Oleksandr Shevchenko
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcUserDaoTest {
 
-    private static final BasicDataSource dataSource = new BasicDataSource();
-
+    private final BasicDataSource dataSource = new BasicDataSource();
+    private final JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
     private static User darthVader;
     private static User lukeSkywalker;
-    private final JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
-    @BeforeAll
-    static void init() throws SQLException {
+    JdbcUserDaoTest() throws SQLException {
         darthVader = User.builder()
                 .id(1)
                 .email("darthvader@gmail.com")
@@ -57,6 +58,10 @@ class JdbcUserDaoTest {
 
         dataSource.setUrl("jdbc:h2:mem:test");
         Connection connection = dataSource.getConnection();
+
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.migrate();
+
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(Objects.requireNonNull(
                         JdbcUserDaoTest.class.getClassLoader().getResourceAsStream("users.sql"))));
@@ -66,12 +71,14 @@ class JdbcUserDaoTest {
     @Test
     void testFindByIdReturnUser() {
         Optional<User> actualUser = jdbcUserDao.findById(1);
+        assertTrue(actualUser.isPresent());
         assertEquals(darthVader, actualUser.get());
     }
 
     @Test
     void testFindByEmailReturnUser() {
         Optional<User> actualUser = jdbcUserDao.findByEmail("darthvader@gmail.com");
+        assertTrue(actualUser.isPresent());
         assertEquals(darthVader, actualUser.get());
     }
 
@@ -79,11 +86,13 @@ class JdbcUserDaoTest {
     void testAddAndUpdateAndRemove() {
         jdbcUserDao.add(lukeSkywalker);
         Optional<User> actualUser2 = jdbcUserDao.findById(2);
+        assertTrue(actualUser2.isPresent());
         assertEquals(lukeSkywalker, actualUser2.get());
 
         lukeSkywalker.setEmail("skywalker@gmail.com");
         jdbcUserDao.update(lukeSkywalker);
         Optional<User> actualUser = jdbcUserDao.findByEmail("skywalker@gmail.com");
+        assertTrue(actualUser.isPresent());
         assertEquals(lukeSkywalker, actualUser.get());
 
         jdbcUserDao.remove(2);

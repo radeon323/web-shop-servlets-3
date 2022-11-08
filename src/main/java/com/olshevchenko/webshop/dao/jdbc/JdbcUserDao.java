@@ -70,12 +70,12 @@ public class JdbcUserDao implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL);
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setObject(3, user.getGender().toString(), Types.OTHER);
+            preparedStatement.setObject(3, user.getGender().getName(), Types.OTHER);
             preparedStatement.setString(4, user.getFirstName());
             preparedStatement.setString(5, user.getLastName());
             preparedStatement.setString(6, user.getAbout());
             preparedStatement.setInt(7, user.getAge());
-            preparedStatement.setObject(8, user.getRole().toString(), Types.OTHER);
+            preparedStatement.setObject(8, user.getRole().getName(), Types.OTHER);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             log.error("Cannot execute query: {} ", ADD_SQL, e);
@@ -101,12 +101,12 @@ public class JdbcUserDao implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setObject(3, user.getGender().toString(), Types.OTHER);
+            preparedStatement.setObject(3, user.getGender().getName(), Types.OTHER);
             preparedStatement.setString(4, user.getFirstName());
             preparedStatement.setString(5, user.getLastName());
             preparedStatement.setString(6, user.getAbout());
             preparedStatement.setInt(7, user.getAge());
-            preparedStatement.setObject(8, user.getRole().toString(), Types.OTHER);
+            preparedStatement.setObject(8, user.getRole().getName(), Types.OTHER);
             preparedStatement.setInt(9, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {

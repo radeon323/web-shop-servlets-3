@@ -2,9 +2,10 @@ package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.entity.Product;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.flywaydb.core.Flyway;
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,19 +21,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 /**
  * @author Oleksandr Shevchenko
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcProductDaoTest {
 
-    private static final BasicDataSource dataSource = new BasicDataSource();
-
-    private static Product productSamsung;
-    private static Product productXiaomi;
-    private static Product productApple;
-    private static Product productNokia;
-
+    private final BasicDataSource dataSource = new BasicDataSource();
     private final JdbcProductDao jdbcProductDao = new JdbcProductDao(dataSource);
+    private final Product productSamsung;
+    private final Product productXiaomi;
+    private final Product productApple;
+    private final Product productNokia;
 
-    @BeforeAll
-    static void init() throws SQLException {
+    JdbcProductDaoTest() throws SQLException {
         productSamsung = Product.builder()
                 .id(1)
                 .name("Samsung Galaxy M52")
@@ -64,6 +63,10 @@ class JdbcProductDaoTest {
 
         dataSource.setUrl("jdbc:h2:mem:test");
         Connection connection = dataSource.getConnection();
+
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.migrate();
+
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(Objects.requireNonNull(
                         JdbcProductDaoTest.class.getClassLoader().getResourceAsStream("products.sql"))));
