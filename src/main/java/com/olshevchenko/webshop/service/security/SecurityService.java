@@ -1,14 +1,14 @@
 package com.olshevchenko.webshop.service.security;
 
-import com.olshevchenko.webshop.service.security.entity.Role;
+import com.olshevchenko.webshop.service.security.entity.Credentials;
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import com.olshevchenko.webshop.service.UserService;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -18,24 +18,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Setter
-@NoArgsConstructor
+@Service
 public class SecurityService {
     private final List<Session> sessionList = new CopyOnWriteArrayList<>();
     private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
-    private UserService userService;
-    private int cookieTtlMinutes;
-    private String excludeUrls;
+    private final UserService userService;
 
-    public SecurityService(UserService userService, int cookieTtlMinutes) {
+    @Value("${cookie.ttl.minutes}")
+    private int cookieTtlMinutes;
+
+    public SecurityService(UserService userService) {
         this.userService = userService;
-        this.cookieTtlMinutes = cookieTtlMinutes;
     }
 
-    public Session login(String email, String password) {
-        User user = getUser(email);
-        checkPassword(user, password);
+    public Session login(Credentials credentials) {
+        User user = getUser(credentials.getEmail());
+        checkPassword(user, credentials.getPassword());
         String token = String.valueOf(UUID.randomUUID());
         Session session = new Session(token, LocalDateTime.now().plusMinutes(cookieTtlMinutes), user);
         sessionList.add(session);
@@ -84,12 +83,5 @@ public class SecurityService {
         return false;
     }
 
-    public String getExcludeUrls() {
-        return excludeUrls;
-    }
 
-
-    public int getCookieTtlMinutes() {
-        return cookieTtlMinutes;
-    }
 }

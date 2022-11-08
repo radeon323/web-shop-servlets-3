@@ -5,7 +5,7 @@ import com.olshevchenko.webshop.entity.Product;
 import com.olshevchenko.webshop.service.CartService;
 import com.olshevchenko.webshop.service.ProductService;
 import com.olshevchenko.webshop.service.security.entity.Session;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
-@AllArgsConstructor
 @RequestMapping()
 public class CartController {
 
-    private CartService cartService;
-    private ProductService productService;
+    private final CartService cartService;
+    private final ProductService productService;
 
     @GetMapping("/cart")
     protected String getCart(HttpServletRequest request, ModelMap model) {

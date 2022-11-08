@@ -2,10 +2,9 @@ package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -15,9 +14,8 @@ import java.util.Optional;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Repository
 public class JdbcUserDao implements UserDao {
 
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
@@ -26,7 +24,7 @@ public class JdbcUserDao implements UserDao {
     private static final String ADD_SQL = "INSERT INTO users (email, password, gender, firstName, lastName, about, age, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM users WHERE id = ?;";
     private static final String UPDATE_BY_ID_SQL = "UPDATE users SET email = ?, password = ?, gender = ?, firstName = ?, lastName = ?, about = ?, age = ?, role = ? WHERE id = ?;";
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     @Override
     public Optional<User> findById(int id) {

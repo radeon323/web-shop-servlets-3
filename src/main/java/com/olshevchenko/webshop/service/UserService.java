@@ -2,39 +2,37 @@ package com.olshevchenko.webshop.service;
 
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
  */
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Service
 public class UserService {
 
-    private UserDao userDao;
+    private final UserDao jdbcUserDao;
 
     public Optional<User> findById(int id) {
-        return userDao.findById(id);
+        return jdbcUserDao.findById(id);
     }
 
     public Optional<User> findByEmail(String email) {
-        return userDao.findByEmail(email);
+        return jdbcUserDao.findByEmail(email);
     }
 
     public void add(User user) {
-        userDao.add(user);
+        jdbcUserDao.add(user);
     }
 
     public void remove(int id) {
-        userDao.remove(id);
+        jdbcUserDao.remove(id);
     }
 
     public void edit(User user) {
-        userDao.update(user);
+        jdbcUserDao.update(user);
     }
 }

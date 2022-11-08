@@ -2,10 +2,9 @@ package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.dao.ProductDao;
 import com.olshevchenko.webshop.entity.Product;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -17,9 +16,8 @@ import java.util.List;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Repository
 public class JdbcProductDao implements ProductDao {
 
     private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
@@ -28,7 +26,7 @@ public class JdbcProductDao implements ProductDao {
     private static final String ADD_SQL = "INSERT INTO products (name, description, price, creation_date) VALUES (?, ?, ?, ?)";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM products WHERE id = ?";
     private static final String UPDATE_BY_ID_SQL = "UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?";
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     @Override
     public List<Product> findAll() {

@@ -2,6 +2,7 @@ package com.olshevchenko.webshop.web.filter;
 
 import com.olshevchenko.webshop.service.security.entity.Session;
 import com.olshevchenko.webshop.service.security.SecurityService;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.context.WebApplicationContext;
@@ -22,15 +23,15 @@ import java.util.Optional;
 @Slf4j
 public class SecurityFilter implements Filter {
     private SecurityService securityService;
-    private List<String> allowedPaths;
+    private List<String> urlExcludeList;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void init(FilterConfig filterConfig) {
         ServletContext servletContext = filterConfig.getServletContext();
-        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        WebApplicationContext webApplicationContext =
+                WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
         securityService = webApplicationContext.getBean(SecurityService.class);
-        allowedPaths = Arrays.asList(securityService.getExcludeUrls().split(","));
+        urlExcludeList = webApplicationContext.getBean(ExcludedUrls.class).getUrlExcludeList();
     }
 
     @Override
@@ -39,15 +40,14 @@ public class SecurityFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse)  response;
 
         String requestURI = httpServletRequest.getRequestURI();
-        for (String allowedPath : allowedPaths) {
-            if (requestURI.startsWith(allowedPath)) {
+        for (String url : urlExcludeList) {
+            if (requestURI.startsWith(url)) {
                 chain.doFilter(request, response);
                 return;
             }
         }
 
         String userToken = getUserToken(httpServletRequest);
-
         Optional<Session> optionalSession = securityService.getSession(userToken);
         if (optionalSession.isPresent()) {
             Session session = optionalSession.get();

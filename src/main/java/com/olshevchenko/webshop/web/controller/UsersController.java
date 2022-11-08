@@ -6,10 +6,12 @@ import com.olshevchenko.webshop.exception.PasswordIncorrectException;
 import com.olshevchenko.webshop.exception.UserNotFoundException;
 import com.olshevchenko.webshop.service.UserService;
 import com.olshevchenko.webshop.service.security.SecurityService;
+import com.olshevchenko.webshop.service.security.entity.Credentials;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.service.security.entity.Session;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +28,16 @@ import java.util.Optional;
  * @author Oleksandr Shevchenko
  */
 @Slf4j
+@RequiredArgsConstructor
 @Controller
-@AllArgsConstructor
 @RequestMapping()
 public class UsersController {
 
-    private UserService userService;
-    private SecurityService securityService;
+    private final UserService userService;
+    private final SecurityService securityService;
+
+    @Value("${cookie.ttl.minutes}")
+    private int cookieTtlMinutes;
 
     @GetMapping("/login")
     protected String getLoginPage() {
@@ -45,10 +50,10 @@ public class UsersController {
                 HttpServletResponse response,
                 ModelMap model) {
         try {
-            Session session = securityService.login(email, password);
+            Credentials credentials = new Credentials(email, password);
+            Session session = securityService.login(credentials);
             Cookie cookie = new Cookie("user-token", session.getToken());
-            //TODO how to set cookieTtlMinutes more smarter?
-            cookie.setMaxAge(securityService.getCookieTtlMinutes()*60);
+            cookie.setMaxAge(cookieTtlMinutes*60);
             response.addCookie(cookie);
             return "redirect:/products";
         } catch (UserNotFoundException e) {
