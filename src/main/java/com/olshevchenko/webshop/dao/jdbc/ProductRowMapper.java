@@ -1,5 +1,6 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
+import com.olshevchenko.jdbctemplate.RowMapper;
 import com.olshevchenko.webshop.entity.Product;
 
 import java.sql.ResultSet;
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
 /**
  * @author Oleksandr Shevchenko
  */
-public class ProductRowMapper {
+public class ProductRowMapper implements RowMapper<Product> {
     public Product mapRow(ResultSet resultSet) throws SQLException {
         int id  = resultSet.getInt("id");
         String name = resultSet.getString("name");

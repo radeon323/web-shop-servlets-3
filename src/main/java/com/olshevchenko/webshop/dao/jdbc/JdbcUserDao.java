@@ -1,13 +1,12 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
+import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.*;
 import java.util.Optional;
 
 /**
@@ -24,93 +23,34 @@ public class JdbcUserDao implements UserDao {
     private static final String ADD_SQL = "INSERT INTO users (email, password, gender, firstName, lastName, about, age, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM users WHERE id = ?;";
     private static final String UPDATE_BY_ID_SQL = "UPDATE users SET email = ?, password = ?, gender = ?, firstName = ?, lastName = ?, about = ?, age = ?, role = ? WHERE id = ?;";
-    private final DataSource dataSource;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Optional<User> findById(int id) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
-                preparedStatement.setInt(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    return Optional.of(USER_ROW_MAPPER.mapRow(resultSet));
-                } else {
-                    return Optional.empty();
-                }
-            }
-        } catch (SQLException e) {
-            log.error("Cannot execute query: {} ", FIND_BY_ID_SQL, e);
-            throw new RuntimeException(e);
-        }
+        return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, USER_ROW_MAPPER, id);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_SQL)) {
-                preparedStatement.setString(1, email);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    return Optional.of(USER_ROW_MAPPER.mapRow(resultSet));
-                } else {
-                    return Optional.empty();
-                }
-            }
-        } catch (SQLException e) {
-            log.error("Cannot execute query: {} ", FIND_BY_EMAIL_SQL, e);
-            throw new RuntimeException(e);
-        }
+        return jdbcTemplate.queryForObject(FIND_BY_EMAIL_SQL, USER_ROW_MAPPER, email);
     }
 
     @Override
     public void add(User user) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL);
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setObject(3, user.getGender().getName(), Types.OTHER);
-            preparedStatement.setString(4, user.getFirstName());
-            preparedStatement.setString(5, user.getLastName());
-            preparedStatement.setString(6, user.getAbout());
-            preparedStatement.setInt(7, user.getAge());
-            preparedStatement.setObject(8, user.getRole().getName(), Types.OTHER);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            log.error("Cannot execute query: {} ", ADD_SQL, e);
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update(ADD_SQL, user.getEmail(), user.getPassword(), user.getGender().getName(),
+                user.getFirstName(), user.getLastName(), user.getAbout(), user.getAge(), user.getRole().getName());
     }
 
     @Override
     public void remove(int id) {
-        try (Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
-            statement.setInt(1, id);
-            statement.execute();
-        } catch (SQLException e) {
-            log.error("Cannot execute query: {} ", DELETE_BY_ID_SQL, e);
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update(DELETE_BY_ID_SQL, id);
     }
 
     @Override
     public void update(User user) {
-        try (Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID_SQL)) {
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setObject(3, user.getGender().getName(), Types.OTHER);
-            preparedStatement.setString(4, user.getFirstName());
-            preparedStatement.setString(5, user.getLastName());
-            preparedStatement.setString(6, user.getAbout());
-            preparedStatement.setInt(7, user.getAge());
-            preparedStatement.setObject(8, user.getRole().getName(), Types.OTHER);
-            preparedStatement.setInt(9, user.getId());
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            log.error("Cannot execute query: {} ", UPDATE_BY_ID_SQL, e);
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update(UPDATE_BY_ID_SQL, user.getEmail(), user.getPassword(), user.getGender().getName(),
+                user.getFirstName(), user.getLastName(), user.getAbout(), user.getAge(),
+                user.getRole().getName(), user.getId());
     }
 
 

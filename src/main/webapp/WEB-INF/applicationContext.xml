@@ -16,6 +16,10 @@
         <property name="password" value="${jdbc.password}" />
     </bean>
 
+    <bean id="jdbcTemplate" class="com.olshevchenko.jdbctemplate.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
     <bean id="excludedUrls" class="com.olshevchenko.webshop.web.filter.ExcludedUrls">
         <property name="urlExclude" value="${security.filter.url.exclude}" />
     </bean>

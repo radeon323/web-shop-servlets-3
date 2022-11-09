@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
@@ -81,9 +82,10 @@ class ProductServiceTest {
                 .build();
         products.add(productXiaomi);
 
-        when(productDaoMock.findById(1)).thenReturn(products.get(0));
-        Product actualProduct = productService.findById(1);
-        assertEquals(productSamsung, actualProduct);
+        when(productDaoMock.findById(1)).thenReturn(Optional.ofNullable(products.get(0)));
+        Optional<Product> actualProduct = productService.findById(1);
+        assertTrue(actualProduct.isPresent());
+        assertEquals(productSamsung, actualProduct.get());
         verify(productDaoMock, times(1)).findById(1);
     }
 

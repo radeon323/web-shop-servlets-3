@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Oleksandr Shevchenko
@@ -21,7 +22,7 @@ public class ProductService {
         return jdbcProductDao.findAll();
     }
 
-    public Product findById(int id) {
+    public Optional<Product> findById(int id) {
         return jdbcProductDao.findById(id);
     }
 

@@ -1,5 +1,6 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
+import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.entity.User;
 import com.olshevchenko.webshop.service.security.entity.Role;
@@ -27,7 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JdbcUserDaoTest {
 
     private final BasicDataSource dataSource = new BasicDataSource();
-    private final JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+    private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    private final JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcTemplate);
     private static User darthVader;
     private static User lukeSkywalker;
 

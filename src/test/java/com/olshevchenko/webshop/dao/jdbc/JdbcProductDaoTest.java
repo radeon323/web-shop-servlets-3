@@ -1,5 +1,6 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
+import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.entity.Product;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.flywaydb.core.Flyway;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class JdbcProductDaoTest {
 
     private final BasicDataSource dataSource = new BasicDataSource();
-    private final JdbcProductDao jdbcProductDao = new JdbcProductDao(dataSource);
+    private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    private final JdbcProductDao jdbcProductDao = new JdbcProductDao(jdbcTemplate);
     private final Product productSamsung;
     private final Product productXiaomi;
     private final Product productApple;
@@ -82,8 +85,9 @@ class JdbcProductDaoTest {
 
     @Test
     void testFindByIdReturnProduct() {
-        Product actualProduct = jdbcProductDao.findById(1);
-        assertEquals(productSamsung, actualProduct);
+        Optional<Product> actualProduct = jdbcProductDao.findById(1);
+        assertTrue(actualProduct.isPresent());
+        assertEquals(productSamsung, actualProduct.get());
     }
 
     @Test

@@ -64,8 +64,8 @@ public class ProductsController {
     protected String getEditProductPage(HttpServletRequest request,
                               @RequestParam int id,
                               ModelMap model) {
-        Product product = productService.findById(id);
-        model.addAttribute("product", product);
+        Optional<Product> optionalProduct = productService.findById(id);
+        optionalProduct.ifPresent(product -> model.addAttribute("product", product));
 
         Session session = (Session) request.getAttribute("session");
         model.addAttribute("session", session);
