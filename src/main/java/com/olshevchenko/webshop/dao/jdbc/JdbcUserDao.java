@@ -1,10 +1,10 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
-import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.dao.UserDao;
 import com.olshevchenko.webshop.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -27,12 +27,14 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public Optional<User> findById(int id) {
-        return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, USER_ROW_MAPPER, id);
+        User user = jdbcTemplate.queryForObject(FIND_BY_ID_SQL, USER_ROW_MAPPER, id);
+        return Optional.ofNullable(user);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return jdbcTemplate.queryForObject(FIND_BY_EMAIL_SQL, USER_ROW_MAPPER, email);
+        User user = jdbcTemplate.queryForObject(FIND_BY_EMAIL_SQL, USER_ROW_MAPPER, email);
+        return Optional.ofNullable(user);
     }
 
     @Override

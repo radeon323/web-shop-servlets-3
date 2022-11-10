@@ -1,7 +1,7 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
-import com.olshevchenko.jdbctemplate.RowMapper;
 import com.olshevchenko.webshop.entity.Product;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,8 @@ import java.sql.Timestamp;
  * @author Oleksandr Shevchenko
  */
 public class ProductRowMapper implements RowMapper<Product> {
-    public Product mapRow(ResultSet resultSet) throws SQLException {
+    @Override
+    public Product mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         int id  = resultSet.getInt("id");
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");

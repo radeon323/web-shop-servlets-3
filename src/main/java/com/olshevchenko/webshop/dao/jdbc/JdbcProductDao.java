@@ -1,10 +1,10 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
-import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.dao.ProductDao;
 import com.olshevchenko.webshop.entity.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,7 +33,8 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public Optional<Product> findById(int id) {
-        return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, PRODUCT_ROW_MAPPER, id);
+        Product product = jdbcTemplate.queryForObject(FIND_BY_ID_SQL, PRODUCT_ROW_MAPPER, id);
+        return Optional.ofNullable(product);
     }
 
     @Override

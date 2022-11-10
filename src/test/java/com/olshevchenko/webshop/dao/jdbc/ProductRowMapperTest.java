@@ -41,7 +41,7 @@ class ProductRowMapperTest {
         when(resultSetMock.getDouble("price")).thenReturn(expectedProduct.getPrice());
         when(resultSetMock.getTimestamp("creation_date")).thenReturn(Timestamp.valueOf(expectedProduct.getCreationDate()));
 
-        Product actualProduct = productRowMapper.mapRow(resultSetMock);
+        Product actualProduct = productRowMapper.mapRow(resultSetMock, 0);
 
         assertEquals(expectedProduct, actualProduct);
     }

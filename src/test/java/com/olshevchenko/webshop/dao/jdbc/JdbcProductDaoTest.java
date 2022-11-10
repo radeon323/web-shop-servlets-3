@@ -1,12 +1,12 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
-import com.olshevchenko.jdbctemplate.JdbcTemplate;
 import com.olshevchenko.webshop.entity.Product;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.flywaydb.core.Flyway;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

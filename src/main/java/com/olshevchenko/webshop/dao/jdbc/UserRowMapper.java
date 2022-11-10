@@ -1,9 +1,9 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
-import com.olshevchenko.jdbctemplate.RowMapper;
 import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +12,8 @@ import java.sql.SQLException;
  * @author Oleksandr Shevchenko
  */
 public class UserRowMapper implements RowMapper<User> {
-    public User mapRow(ResultSet resultSet) throws SQLException {
+    @Override
+    public User mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         int id = resultSet.getInt("id");
         String email = resultSet.getString("email");
         String password = resultSet.getString("password");

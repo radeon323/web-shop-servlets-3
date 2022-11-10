@@ -49,7 +49,7 @@ class UserRowMapperTest {
         when(resultSetMock.getInt("age")).thenReturn(expectedUser.getAge());
         when(resultSetMock.getString("role")).thenReturn(String.valueOf(expectedUser.getRole()));
 
-        User actualUser = userRowMapper.mapRow(resultSetMock);
+        User actualUser = userRowMapper.mapRow(resultSetMock,0);
 
         assertEquals(expectedUser, actualUser);
     }
