@@ -45,7 +45,6 @@ class SecurityServiceTest {
     @InjectMocks
     private SecurityService securityService = new SecurityService(userService);
 
-
     @Test
     void testProvidePasswordHashAndSalt() {
         String expectedHashedAndSaltedPassword = user.getPassword();

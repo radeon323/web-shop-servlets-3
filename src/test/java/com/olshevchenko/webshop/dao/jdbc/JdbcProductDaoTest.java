@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcProductDaoTest {
-
     private final BasicDataSource dataSource = new BasicDataSource();
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
     private final JdbcProductDao jdbcProductDao = new JdbcProductDao(jdbcTemplate);

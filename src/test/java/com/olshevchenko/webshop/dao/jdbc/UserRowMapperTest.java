@@ -4,7 +4,6 @@ import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,23 +15,18 @@ import static org.mockito.Mockito.when;
 /**
  * @author Oleksandr Shevchenko
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserRowMapperTest {
-    private final User expectedUser;
-
-    UserRowMapperTest() {
-        expectedUser = User.builder()
-                .id(1)
-                .email("gofgeeman33@gmail.com")
-                .password("blackmesa33")
-                .gender(Gender.MALE)
-                .firstName("Gordon")
-                .lastName("Freeman")
-                .about("Rise and shine, Mr. Freeman.")
-                .age(27)
-                .role(Role.USER)
-                .build();
-    }
+    private final User expectedUser = User.builder()
+                                            .id(1)
+                                            .email("gofgeeman33@gmail.com")
+                                            .password("blackmesa33")
+                                            .gender(Gender.MALE)
+                                            .firstName("Gordon")
+                                            .lastName("Freeman")
+                                            .about("Rise and shine, Mr. Freeman.")
+                                            .age(27)
+                                            .role(Role.USER)
+                                            .build();
 
     @Test
     void testMapRow() throws SQLException {

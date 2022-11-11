@@ -2,7 +2,6 @@ package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.entity.Product;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,19 +15,14 @@ import static org.mockito.Mockito.when;
 /**
  * @author Oleksandr Shevchenko
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductRowMapperTest {
-    private final Product expectedProduct;
-
-    ProductRowMapperTest() {
-        expectedProduct = Product.builder()
-                .id(1)
-                .name("Samsung Galaxy M52")
-                .description("6.7 inches, Qualcomm SM7325 Snapdragon 778G 5G")
-                .price(13499.0)
-                .creationDate(LocalDateTime.of(2022, 2,24, 4, 0, 0))
-                .build();
-    }
+    private final Product expectedProduct = Product.builder()
+                                                .id(1)
+                                                .name("Samsung Galaxy M52")
+                                                .description("6.7 inches, Qualcomm SM7325 Snapdragon 778G 5G")
+                                                .price(13499.0)
+                                                .creationDate(LocalDateTime.of(2022, 2,24, 4, 0, 0))
+                                                .build();
 
     @Test
     void testMapRow() throws SQLException {
@@ -45,6 +39,4 @@ class ProductRowMapperTest {
 
         assertEquals(expectedProduct, actualProduct);
     }
-
-
 }

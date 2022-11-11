@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcUserDaoTest {
-
     private final BasicDataSource dataSource = new BasicDataSource();
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
     private final JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcTemplate);
