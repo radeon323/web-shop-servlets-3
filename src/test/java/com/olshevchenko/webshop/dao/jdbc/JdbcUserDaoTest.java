@@ -29,8 +29,8 @@ class JdbcUserDaoTest {
     private final BasicDataSource dataSource = new BasicDataSource();
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
     private final JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcTemplate);
-    private static User darthVader;
-    private static User lukeSkywalker;
+    private final User darthVader;
+    private final User lukeSkywalker;
 
     JdbcUserDaoTest() throws SQLException {
         darthVader = User.builder()

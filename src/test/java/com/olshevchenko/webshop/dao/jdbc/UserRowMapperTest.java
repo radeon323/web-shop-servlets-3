@@ -3,8 +3,8 @@ package com.olshevchenko.webshop.dao.jdbc;
 import com.olshevchenko.webshop.entity.Gender;
 import com.olshevchenko.webshop.service.security.entity.Role;
 import com.olshevchenko.webshop.entity.User;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,11 +16,11 @@ import static org.mockito.Mockito.when;
 /**
  * @author Oleksandr Shevchenko
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserRowMapperTest {
-    private static User expectedUser;
+    private final User expectedUser;
 
-    @BeforeAll
-    static void beforeAll() {
+    UserRowMapperTest() {
         expectedUser = User.builder()
                 .id(1)
                 .email("gofgeeman33@gmail.com")

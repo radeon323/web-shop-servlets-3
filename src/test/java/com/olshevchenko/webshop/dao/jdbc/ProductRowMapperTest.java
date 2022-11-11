@@ -1,8 +1,8 @@
 package com.olshevchenko.webshop.dao.jdbc;
 
 import com.olshevchenko.webshop.entity.Product;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,11 +16,11 @@ import static org.mockito.Mockito.when;
 /**
  * @author Oleksandr Shevchenko
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductRowMapperTest {
-    private static Product expectedProduct;
+    private final Product expectedProduct;
 
-    @BeforeAll
-    static void beforeAll() {
+    ProductRowMapperTest() {
         expectedProduct = Product.builder()
                 .id(1)
                 .name("Samsung Galaxy M52")
